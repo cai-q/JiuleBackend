@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/dd', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
@@ -24,7 +24,15 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
+// Password reset link request routes...
+Route::get('password/email', 'Auth\PasswordController@getEmail');
+Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+// Password reset routes...
+Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+Route::post('password/reset', 'Auth\PasswordController@postReset');
+
 //管理后台，增删改查功能
-Route::resource('watch', 'Watch\WatchController');//TODO 手表管理
-Route::resource('company', 'User\CompanyController');//TODO 企业账号管理
-Route::resource('Warning', 'Warning\WarningController');//TODO 报警管理
+Route::resource('watch', 'Management\WatchController');//TODO 手表管理
+Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
+Route::resource('Warning', 'Management\WarningController');//TODO 报警管理
