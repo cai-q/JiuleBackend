@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 // Authentication routes...
@@ -36,3 +36,5 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
 Route::resource('Warning', 'Management\WarningController');//TODO 报警管理
+
+Route::controller('api', 'Api\MobileAppController');//TODO 手机app接口
