@@ -1,21 +1,54 @@
-<form method="POST" action="/auth/login">
-    {!! csrf_field() !!}
+@extends('app')
 
-    <div>
-        Email
-        <input type="email" name="email" value="{{ old('email') }}">
-    </div>
+@section('css')
+    <link href="{{ asset('/css/components/form-advanced.almost-flat.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/components/form-password.almost-flat.min.css') }}" rel="stylesheet">
+@endsection
 
-    <div>
-        Password
-        <input type="password" name="password" id="password">
-    </div>
+@section('content')
+<div class="uk-grid uk-grid-collapse">
+    <div class="uk-width-small-1-3 uk-container-center">
+        <div class="uk-panel">
+            @if (count($errors) > 0)
+                <div class="uk-alert uk-alert-danger">
+                    <strong>Whoops!</strong> 看起来你输错了什么。<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-    <div>
-        <input type="checkbox" name="remember"> Remember Me
+            <form class="uk-form uk-container-center" role="form" method="POST" action="{{ url('/auth/login') }}">
+                <fieldset data-uk-margin>
+                    <legend>请登录</legend>
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div class="uk-form-row uk-form-icon">
+                        <i class="uk-icon-user"></i>
+                        <input type="email" class="form-control" name="email" placeholder="请输入登录邮箱" value="{{ old('email') }}">
+                    </div>
+                    <br>
+                    <div class="uk-form-password uk-form-row uk-form-icon">
+                        <i class="uk-icon-lock"></i>
+                        <input type="password" name="password" placeholder="请输入密码">
+                        <a href="" class="uk-form-password-toggle" data-uk-form-password="{lblShow:'显示', lblHide:'隐藏'}" tabindex="-1">显示</a>
+                    </div>
+                    <div class="uk-form-row">
+                        <input type="checkbox" name="remember" value=""> 记住此账号
+                    </div>
+                    <div class="uk-form-row">
+                        <button type="submit" class="uk-button uk-button-primary">提交</button>
+                        <a class="uk-button uk-button-link" href="{{ url('/password/email') }}">忘记密码</a>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+@endsection
+
+@section('js')
+    <script src="{{ asset('/js/components/form-password.min.js') }}"></script>
+@endsection

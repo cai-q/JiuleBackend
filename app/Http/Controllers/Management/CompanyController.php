@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Management;
 
+use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -12,7 +13,7 @@ class CompanyController extends Controller
 
     public function __construct()
     {
-        $this->middleware['auth.basic'];
+        $this->middleware('auth');
     }
 
     /**
@@ -22,7 +23,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return view('company.index')->with(
+            [
+                'items' => User::where('id', '>', 0)->paginate(10)
+            ]
+        );
     }
 
     /**
@@ -32,7 +37,11 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return view('company.create')->with(
+            [
+                'parents' => User::where('user_type', 1)
+            ]
+        );
     }
 
     /**
@@ -43,7 +52,35 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'serial' => 'required',
+            'email' => 'required|unique:users',
+            'name' => 'required',
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $list = [
+            'name',
+            'email',
+            'serial',
+            'parent_id',
+            'user_type'
+        ];
+
+        $user = new User();
+        foreach ($list as $enum) {
+            if ($request->has($enum)) {
+                $user->$enum = $request->input($enum);
+            }
+        }
+
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+
+        return redirect()->back()->with('success', true);
     }
 
     /**

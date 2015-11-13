@@ -11,9 +11,13 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', ['middleware' => 'auth', function () {
+    return redirect('home');
+}]);
+
+Route::get('/home', ['middleware' => 'auth', function () {
     return view('home');
-});
+}]);
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
