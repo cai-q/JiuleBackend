@@ -30,6 +30,8 @@
                         <th>父级企业编号（如存在）</th>
                         <th>联系人</th>
                         <th>联系电话</th>
+                        <th>编辑资料</th>
+                        <th>删除记录</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -76,6 +78,16 @@
                                         无
                                     @endif
                                 </i>
+                            </td>
+                            <td>
+                                <a class="uk-button uk-form-horizontal" href="/company/{{$item->id}}/edit">编辑资料</a>
+                            </td>
+                            <td>
+                                <form class="uk-form uk-form-horizontal" action="/company/{{$item->id}}" method="post">
+                                    {{ method_field('DELETE') }}
+                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="uk-button">删除记录</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

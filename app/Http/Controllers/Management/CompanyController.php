@@ -23,11 +23,15 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('company.index')->with(
-            [
-                'items' => User::where('id', '>', 1)->paginate(10)
-            ]
-        );
+        if (\Auth::user()->user_type == 0) {
+            $items = User::where('id', '>', 1);
+        } else {
+            $items = User::where('parent_id', \Auth::user()->id);
+        }
+
+        return view('company.index')->with([
+            'items' => $items->paginate(10)
+        ]);
     }
 
     /**
@@ -37,11 +41,15 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.create')->with(
-            [
-                'parents' => User::where('user_type', 1)->get()
-            ]
-        );
+        if (\Auth::user()->user_type == 0) {
+            $parents = User::where('user_type', 1)->get();
+        } else {
+            $parents = \Auth::user()->get();
+        }
+
+        return view('company.create')->with([
+            'parents' => $parents
+        ]);
     }
 
     /**
@@ -104,7 +112,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('company.edit')->with([
+            'item' => User::find($id)
+        ]);
     }
 
     /**
@@ -116,7 +126,23 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $list = [
+            'address',
+            'certificate',
+            'contact_name',
+            'contact_phone'
+        ];
+
+        $user = User::find($id);
+        foreach ($list as $enum) {
+            if ($request->has($enum)) {
+                $user->$enum = $request->input($enum);
+            }
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', true);
     }
 
     /**
@@ -127,21 +153,37 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::find($id)->delete();
+
+        User::where('parent_id', $id)->delete();//删除所有子级企业
+
+        return redirect()->back()->with([
+            'success' => true
+        ]);
     }
 
     public function getSearch(Request $request)
     {
         $key = '%' . $request->input('key') . '%';
-        return view('company.index')->with(
-            [
-                'items' => User
-                    ::where('serial', 'like', $key)
-                    ->orWhere('name', 'like', $key)
-                    ->orWhere('contact_name', 'like', $key)
-                    ->orWhere('contact_phone', 'like', $key)
-                    ->paginate(10)
-            ]
-        );
+
+        if (\Auth::user()->user_type == 0) {
+            $items = User
+                ::where('serial', 'like', $key)
+                ->orWhere('name', 'like', $key)
+                ->orWhere('contact_name', 'like', $key)
+                ->orWhere('contact_phone', 'like', $key);
+        } else {
+            $items = User
+                ::where('serial', 'like', $key)
+                ->orWhere('name', 'like', $key)
+                ->orWhere('contact_name', 'like', $key)
+                ->orWhere('contact_phone', 'like', $key)
+                ->where('parent_id', '=', \Auth::user()->id);
+        }
+
+
+        return view('company.index')->with([
+            'items' => $items->paginate(10)
+        ]);
     }
 }
