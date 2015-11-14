@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Member;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -11,7 +12,7 @@ class MobileAppController extends Controller
 {
     public function postLogin(\Request $request)
     {
-        //TODO app login
+        dd(Member::find(96));
     }
 
     public function postMessage(\Request $request)
