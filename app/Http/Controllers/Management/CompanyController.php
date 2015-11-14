@@ -25,7 +25,7 @@ class CompanyController extends Controller
     {
         return view('company.index')->with(
             [
-                'items' => User::where('id', '>', 0)->paginate(10)
+                'items' => User::where('id', '>', 1)->paginate(10)
             ]
         );
     }
@@ -39,7 +39,7 @@ class CompanyController extends Controller
     {
         return view('company.create')->with(
             [
-                'parents' => User::where('user_type', 1)
+                'parents' => User::where('user_type', 1)->get()
             ]
         );
     }
@@ -67,7 +67,8 @@ class CompanyController extends Controller
             'email',
             'serial',
             'parent_id',
-            'user_type'
+            'contact_name',
+            'contact_phone'
         ];
 
         $user = new User();
@@ -78,6 +79,7 @@ class CompanyController extends Controller
         }
 
         $user->password = bcrypt($request->input('password'));
+        $user->user_type = 1;
         $user->save();
 
         return redirect()->back()->with('success', true);
@@ -126,5 +128,20 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getSearch(Request $request)
+    {
+        $key = '%' . $request->input('key') . '%';
+        return view('company.index')->with(
+            [
+                'items' => User
+                    ::where('serial', 'like', $key)
+                    ->orWhere('name', 'like', $key)
+                    ->orWhere('contact_name', 'like', $key)
+                    ->orWhere('contact_phone', 'like', $key)
+                    ->paginate(10)
+            ]
+        );
     }
 }

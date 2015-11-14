@@ -14,6 +14,11 @@
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
                 <a href="{{url('/company/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i> 新增企业账号</a>
+                <div style="display: inline-block;" id="search">
+                    <form class="uk-search" data-uk-search action="{{url('/company/search')}}">
+                        <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
+                    </form>
+                </div>
                 <table class="uk-table uk-table-hover uk-table-striped">
                     <caption>所有企业账号</caption>
                     <thead>
@@ -23,17 +28,55 @@
                         <th>登陆邮箱</th>
                         <th>企业级别</th>
                         <th>父级企业编号（如存在）</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
                     </tr>
                     </thead>
                     <tbody>
 
                     @foreach($items as $item)
                         <tr>
-                            <td>{{$item->serial}}</td>
+                            <td>
+                                <i class="uk-badge uk-badge-warning">
+                                    {{$item->serial}}
+                                </i>
+                            </td>
                             <td>{{$item->name}}</td>
                             <td>{{$item->emali}}</td>
-                            <td>{{$item->user_type}}</td>
-                            <td>{{$item->parent_id}}</td>
+                            <td>
+                                @if($item->user_type === 0)
+                                    <i class="uk-badge" style="background-color: #d43f3a">管理员</i>
+                                @elseif($item->user_type === 1)
+                                    <i class="uk-badge" style="background-color: #008abf">企业账号</i>
+                                @endif
+                            </td>
+                            <td>
+                                <i class="uk-badge uk-badge-warning">
+                                    @if($item->parent_id && $item->parent_id != 1)
+                                        {{\App\User::find($item->parent_id)->serial}}
+                                    @else
+                                        无
+                                    @endif
+                                </i>
+                            </td>
+                            <td>
+                                <i class="uk-badge uk-badge-warning">
+                                    @if($item->contact_name && $item->contact_name != '')
+                                        {{$item->contact_name}}
+                                    @else
+                                        无
+                                    @endif
+                                </i>
+                            </td>
+                            <td>
+                                <i class="uk-badge uk-badge-warning">
+                                    @if($item->contact_phone && $item->contact_phone != '')
+                                        {{$item->contact_phone}}
+                                    @else
+                                        无
+                                    @endif
+                                </i>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

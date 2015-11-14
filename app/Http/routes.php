@@ -36,9 +36,13 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
+//独立的搜索服务
+Route::any('company/search', 'Management\CompanyController@getSearch');
+
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
 Route::resource('Warning', 'Management\WarningController');//TODO 报警管理
+
 
 Route::controller('api', 'Api\MobileAppController');//TODO 手机app接口

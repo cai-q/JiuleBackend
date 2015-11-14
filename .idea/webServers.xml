@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="594e583d-fbd4-4b8e-8461-30ed502597e2" name="jiule testServer" url="http://203.88.170.163">
+        <fileTransfer host="203.88.170.163" port="22" privateKey="$USER_HOME$/.ssh/id_rsa" rootFolder="/home/jiule-backend/JiuleBackend" accessType="SFTP" username="root" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -27,20 +27,21 @@
                             <input type="text" class="form-control" name="name" required>
                         </div>
                         <div class="uk-form-row">
+                            <label  class="uk-form-label">联系人</label>
+                            <input type="text" class="form-control" name="contact_name" required>
+                        </div>
+                        <div class="uk-form-row">
+                            <label  class="uk-form-label">联系电话</label>
+                            <input type="text" class="form-control" name="contact_phone" required>
+                        </div>
+                        <div class="uk-form-row">
                             <label  class="uk-form-label">登陆密码</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">企业类别</label>
-                            <select name="user_type">
-                                <option value="1">父级企业</option>
-                                <option value="2">子级企业</option>
-                            </select>
-                        </div>
-                        <div class="uk-form-row">
                             <label  class="uk-form-label">父级企业</label>
                             <select name="parent_id">
-                                <option value="0">无</option>
+                                <option value="1">无</option>
                                 @foreach($parents as $parent)
                                     <option value="{{$parent->id}}">{{$parent->name}}</option>
                                 @endforeach
