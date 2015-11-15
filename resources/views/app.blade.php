@@ -29,7 +29,6 @@
                 <ul class="uk-navbar-nav uk-hidden-small">
                     @if (Auth::guest())
                         <li><a href="{{ url('/auth/login') }}">登录</a></li>
-                        <li><a href="{{ url('/auth/register') }}">注册</a></li>
                     @else
                         <?php $user = Auth::user();?>
                             @if($user->user_type == 0)
@@ -49,7 +48,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ url('/city-admin/city-servers') }}">
+                                                <a href="{{ url('/member') }}">
                                                     用户管理
                                                 </a>
                                             </li>
@@ -58,12 +57,12 @@
                                                 手表及报警管理
                                             </li>
                                             <li>
-                                                <a href="{{ url('/admin/orders') }}">
+                                                <a href="{{ url('/watch') }}">
                                                     手表管理
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ url('/city-admin/city-servers') }}">
+                                                <a href="{{ url('/warning') }}">
                                                     报警管理
                                                 </a>
                                             </li>
@@ -84,7 +83,7 @@
                                             企业信息管理
                                         </li>
                                         <li>
-                                            <a href="{{ url('/admin/city-admin') }}">
+                                            <a href="{{ url('/company/' . $user->id . '/edit') }}">
                                                 编辑企业信息
                                             </a>
                                         </li>
@@ -93,18 +92,23 @@
                                             子企业管理
                                         </li>
                                         <li>
-                                            <a href="{{ url('/admin/business-form') }}">
+                                            <a href="{{ url('/company') }}">
                                                 子企业列表
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ url('/admin/owner-form') }}">
+                                            <a href="{{ url('/company/create') }}">
                                                 新增子企业
                                             </a>
                                         </li>
                                         <li class="uk-nav-divider"></li>
                                         <li class="uk-nav-header">
                                             手表管理
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('/watch') }}">
+                                                手表列表
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="{{ url('/admin/statistic/index') }}">
@@ -114,6 +118,15 @@
                                         <li>
                                             <a href="{{ url('/admin/statistic/online-walkers') }}">
                                                 激活手表
+                                            </a>
+                                        </li>
+                                        <li class="uk-nav-divider"></li>
+                                        <li class="uk-nav-header">
+                                            报警查询
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('/warning') }}">
+                                                报警列表
                                             </a>
                                         </li>
                                         <li class="uk-nav-divider"></li>

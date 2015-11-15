@@ -26,7 +26,7 @@
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="uk-form-row uk-form-icon">
                         <i class="uk-icon-user"></i>
-                        <input type="email" class="form-control" name="email" placeholder="请输入登录邮箱" value="{{ old('email') }}">
+                        <input type="text" class="form-control" name="email" placeholder="请输入登录邮箱" value="{{ old('email') }}">
                     </div>
                     <br>
                     <div class="uk-form-password uk-form-row uk-form-icon">

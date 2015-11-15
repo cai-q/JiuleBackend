@@ -25,8 +25,6 @@
                     <tr>
                         <th>企业编号</th>
                         <th>企业名称</th>
-                        <th>企业地址</th>
-                        <th>营业执照</th>
                         <th>登陆邮箱</th>
                         <th>企业级别</th>
                         <th>父级企业编号（如存在）</th>
@@ -46,13 +44,11 @@
                                 </i>
                             </td>
                             <td>{{$item->name}}</td>
-                            <td>{{$item->address}}</td>
-                            <td>{{$item->certificate}}</td>
-                            <td>{{$item->email}}</td>
+                            <td>{{$item->emali}}</td>
                             <td>
-                                @if($item->user_type == 0)
+                                @if($item->user_type === 0)
                                     <i class="uk-badge" style="background-color: #d43f3a">管理员</i>
-                                @elseif($item->user_type == 1)
+                                @elseif($item->user_type === 1)
                                     <i class="uk-badge" style="background-color: #008abf">企业账号</i>
                                 @endif
                             </td>
