@@ -14,7 +14,7 @@ class MobileAppController extends Controller
     public function getLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|exists:mysql_old.member,uname',
+            'username' => 'required|exists:mysql_old.member,userid',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
@@ -27,7 +27,7 @@ class MobileAppController extends Controller
         $user_name = $request->input('username');
         $password = $request->input('password');
 
-        $user = Member::where('uname', '=', $user_name);
+        $user = Member::where('userid', '=', $user_name);
         if ($user->pwd == strrev(md5($password))) {
             return response()->json([
                 'userid' => $user->userid,
@@ -67,5 +67,10 @@ class MobileAppController extends Controller
     public function postUserIndex(Request $request)
     {
         //TODO get the index information
+    }
+
+    public function getTest(Request $request)
+    {
+
     }
 }

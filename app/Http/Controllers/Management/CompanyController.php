@@ -41,14 +41,17 @@ class CompanyController extends Controller
      */
     public function create()
     {
+        $self_as_parent = false;
         if (\Auth::user()->user_type == 0) {
             $parents = User::where('user_type', 1)->get();
         } else {
-            $parents = \Auth::user()->get();
+            $parents = [\Auth::user()];
+            $self_as_parent = \Auth::user();
         }
 
         return view('company.create')->with([
-            'parents' => $parents
+            'parents' => $parents,
+            'self_as_parent' => $self_as_parent
         ]);
     }
 

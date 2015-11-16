@@ -38,15 +38,27 @@
                             <label  class="uk-form-label">登陆密码</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>
-                        <div class="uk-form-row">
-                            <label  class="uk-form-label">父级企业</label>
-                            <select name="parent_id">
-                                <option value="1">无</option>
-                                @foreach($parents as $parent)
-                                    <option value="{{$parent->id}}">{{$parent->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
+                        @if(!$self_as_parent)
+                            <div class="uk-form-row">
+                                <label  class="uk-form-label">父级企业</label>
+                                <select name="parent_id">
+                                    <option value="1">无</option>
+                                    @foreach($parents as $parent)
+                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <div class="uk-form-row">
+                                <label  class="uk-form-label">父级企业</label>
+                                <select name="parent_id" disabled>
+                                    @foreach($parents as $parent)
+                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                     </fieldset>
                     <fieldset>
                         <div class="uk-form-row">

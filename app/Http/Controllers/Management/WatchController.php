@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Management;
 
+use App\Member;
+use App\Watch;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -22,7 +24,12 @@ class WatchController extends Controller
      */
     public function index()
     {
-        //
+        if (\Auth::user()->usertype == 0) {
+            $items = Member::all();
+        }
+        return view('watch.index')->with([
+            'items' => $items
+         ]);
     }
 
     /**
