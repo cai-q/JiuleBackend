@@ -14,7 +14,7 @@ class WatchController extends Controller
 
     public function __construct()
     {
-        $this->middleware['auth'];
+        $this->middleware('auth');
     }
 
     /**
@@ -25,11 +25,13 @@ class WatchController extends Controller
     public function index()
     {
         if (\Auth::user()->usertype == 0) {
-            $items = Member::all();
+            $items = Member::paginate(10);
+        } else {
+            $items = Member::where('fid', '=', \Auth::user()->id)->paginate(10);
         }
         return view('watch.index')->with([
             'items' => $items
-         ]);
+        ]);
     }
 
     /**
@@ -39,7 +41,7 @@ class WatchController extends Controller
      */
     public function create()
     {
-        //
+        return view('watch.create');
     }
 
     /**
@@ -96,5 +98,26 @@ class WatchController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getSearch(Request $request)
+    {
+        $key = '%' . $request->input('key') . '%';
+
+        if (\Auth::user()->user_type == 0) {
+            $items = Member
+                ::where('pid', 'like', $key)
+                ->orWhere('userid', 'like', $key);
+        } else {
+            $items = Member
+                ::where('pid', 'like', $key)
+                ->orWhere('userid', 'like', $key)
+                ->where('parent_id', '=', \Auth::user()->id);
+        }
+
+
+        return view('watch.index')->with([
+            'items' => $items->paginate(10)
+        ]);
     }
 }

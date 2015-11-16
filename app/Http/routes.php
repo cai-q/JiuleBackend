@@ -38,6 +38,7 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 
 //独立的搜索服务
 Route::any('company/search', 'Management\CompanyController@getSearch');
+Route::any('watch/search', 'Management\WatchController@getSearch');
 
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理

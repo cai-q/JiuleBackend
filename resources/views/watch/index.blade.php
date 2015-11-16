@@ -13,82 +13,73 @@
     <div class="uk-grid uk-grid-collapse">
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
-                <a href="{{url('/company/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i> 新增企业账号</a>
                 <div style="display: inline-block;" id="search">
-                    <form class="uk-search" data-uk-search action="{{url('/company/search')}}">
+                    <form class="uk-search" data-uk-search action="{{url('/watch/search')}}">
                         <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
                     </form>
                 </div>
                 <table class="uk-table uk-table-hover uk-table-striped">
-                    <caption>所有企业账号</caption>
+                    <caption>手表管理</caption>
                     <thead>
                     <tr>
-                        <th>企业编号</th>
-                        <th>企业名称</th>
-                        <th>登陆邮箱</th>
-                        <th>企业级别</th>
-                        <th>父级企业编号（如存在）</th>
-                        <th>联系人</th>
-                        <th>联系电话</th>
-                        <th>编辑资料</th>
-                        <th>删除记录</th>
+                        <th>手表id</th>
+                        <th>用户id</th>
+                        <th>是否出库</th>
+                        <th>是否激活</th>
+                        <th>是否活跃</th>
                     </tr>
                     </thead>
                     <tbody>
 
+                    <?php $now = \Carbon\Carbon::now()?>
                     @foreach($items as $item)
                         <tr>
                             <td>
                                 <i class="uk-badge uk-badge-warning">
-                                    {{$item->serial}}
+                                    {{$item->pid}}
                                 </i>
                             </td>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->emali}}</td>
+                            <td>{{$item->userid}}</td>
                             <td>
-                                @if($item->user_type === 0)
-                                    <i class="uk-badge" style="background-color: #d43f3a">管理员</i>
-                                @elseif($item->user_type === 1)
-                                    <i class="uk-badge" style="background-color: #008abf">企业账号</i>
+                                @if(($a = DB::connection('mysql_old')->table('product_ext')->where('pid', ''.$item->pid)->first()) != null)
+                                    @if($a->saled == 1)
+                                        <i class="uk-badge uk-badge-success">
+                                            已售出
+                                        </i>
+                                    @else
+                                        <i class="uk-badge uk-badge-danger">
+                                            未售出
+                                        </i>
+                                    @endif
+                                @else
+                                    <i class="uk-badge uk-badge-danger">
+                                        未查询到
+                                    </i>
                                 @endif
                             </td>
                             <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->parent_id && $item->parent_id != 1)
-                                        {{\App\User::find($item->parent_id)->serial}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
+                                @if($item->status == 0)
+                                    <i class="uk-badge uk-badge-success">
+                                        已激活
+                                    </i>
+                                @else
+                                    <i class="uk-badge uk-badge-error">
+                                        未激活
+                                    </i>
+                                @endif
                             </td>
                             <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->contact_name && $item->contact_name != '')
-                                        {{$item->contact_name}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
+                                @if(\Carbon\Carbon::createFromTimestamp($item->logintime, 'Asia/Shanghai')->diffInDays($now) <= 7)
+                                    <i class="uk-badge uk-badge-success">
+                                        活跃
+                                    </i>
+                                @else
+                                    <i class="uk-badge uk-badge-danger">
+                                        不活跃
+                                    </i>
+                                @endif
                             </td>
-                            <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->contact_phone && $item->contact_phone != '')
-                                        {{$item->contact_phone}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
-                            </td>
-                            <td>
-                                <a class="uk-button uk-form-horizontal" href="/company/{{$item->id}}/edit">编辑资料</a>
-                            </td>
-                            <td>
-                                <form class="uk-form uk-form-horizontal" action="/company/{{$item->id}}" method="post">
-                                    {{ method_field('DELETE') }}
-                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="uk-button">删除记录</button>
-                                </form>
-                            </td>
+
                         </tr>
                     @endforeach
                     </tbody>

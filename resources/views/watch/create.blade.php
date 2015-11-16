@@ -10,9 +10,9 @@
     <div class="uk-grid uk-grid-collapse">
         <div class="uk-width-small-2-3 uk-container-center">
             <div class="uk-panel">
-                <form class="uk-form uk-container-center uk-form-horizontal" role="form" method="POST" action="{{ url('company') }}">
+                <form class="uk-form uk-container-center uk-form-horizontal" role="form" method="POST" action="{{ url('watch') }}">
                     <fieldset data-uk-margin>
-                        <legend>添加企业账号</legend>
+                        <legend>添加手表</legend>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="uk-form-row">
                             <label  class="uk-form-label">企业编号</label>
@@ -38,15 +38,27 @@
                             <label  class="uk-form-label">登陆密码</label>
                             <input type="password" class="form-control" name="password" required>
                         </div>
-                        <div class="uk-form-row">
-                            <label  class="uk-form-label">父级企业</label>
-                            <select name="parent_id">
-                                <option value="1">无</option>
-                                @foreach($parents as $parent)
-                                    <option value="{{$parent->id}}">{{$parent->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+
+                        @if(!$self_as_parent)
+                            <div class="uk-form-row">
+                                <label  class="uk-form-label">所属企业</label>
+                                <select name="parent_id">
+                                    <option value="0">无</option>
+                                    @foreach($parents as $parent)
+                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <div class="uk-form-row">
+                                <label  class="uk-form-label">所属企业</label>
+                                <select name="parent_id" disabled>
+                                    @foreach($parents as $parent)
+                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                     </fieldset>
                     <fieldset>
                         <div class="uk-form-row">
