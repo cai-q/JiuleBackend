@@ -27,6 +27,7 @@
                         <th>是否出库</th>
                         <th>是否激活</th>
                         <th>是否活跃</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -79,7 +80,23 @@
                                     </i>
                                 @endif
                             </td>
-
+                            <td>
+                                <div style="display: inline-block; position: relative;" data-uk-dropdown="{mode:'click'}">
+                                    <button class="uk-button">
+                                        操作
+                                        <i class="uk-icon-caret-down"></i>
+                                    </button>
+                                    <div class="uk-dropdown">
+                                        <ul class="uk-nav uk-nav-dropdown">
+                                            @if($item->status == 0)
+                                                <li><a class="uk-text-" href="{{url('watch/'. $item->id . '/edit')}}">编辑资料</a></li>
+                                            @else
+                                                <li><a class="uk-text-" href="{{url('watch/activate?pid='.$item->id)}}">一键激活</a></li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

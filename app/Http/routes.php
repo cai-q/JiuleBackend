@@ -40,6 +40,9 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 Route::any('company/search', 'Management\CompanyController@getSearch');
 Route::any('watch/search', 'Management\WatchController@getSearch');
 
+//手表激活服务
+Route::any('watch/activate', 'Management\WatchController@getActivate');
+
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
