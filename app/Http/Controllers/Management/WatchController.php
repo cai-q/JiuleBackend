@@ -239,8 +239,8 @@ class WatchController extends Controller
 
     public function getActivate(Request $request)
     {
-        $pid = $request->input('pid');
-        $member = Member::where('pid', $pid);
+        $id = $request->input('pid');
+        $member = Member::find($id);
         $member->status = 0;
         $member->save();
 

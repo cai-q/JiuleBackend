@@ -14,4 +14,7 @@ class Member extends Model
     protected $connection = 'mysql_old';
 
     protected $table = 'member';
+
+    public $timestamps = false;
+
 }
