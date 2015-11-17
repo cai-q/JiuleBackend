@@ -183,6 +183,9 @@ class WatchController extends Controller
         $member->save();
 
         $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
+        if (!$relative) {
+            $relative = new Relative();
+        }
         $relative->name = $emergency_contact;
         $relative->phone = $emergency_phone;
         $relative->mid = $member->id;
@@ -190,6 +193,9 @@ class WatchController extends Controller
         $relative->save();
 
         $relative = Relative::where('mid', $member->id)->where('main', 0)->first();
+        if (!$relative) {
+            $relative = new Relative();
+        }
         $relative->name = $emergency_contact2;
         $relative->phone = $emergency_phone2;
         $relative->mid = $member->id;

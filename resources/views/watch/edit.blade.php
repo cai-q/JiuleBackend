@@ -24,19 +24,19 @@
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人</label>
-                            <input type="text" class="form-control" name="emergency_contact" value="{{$contact1->name}}" required>
+                            <input type="text" class="form-control" name="emergency_contact" value="{{$contact1?$contact1->name:''}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人 电话</label>
-                            <input type="text" class="form-control" name="emergency_phone" value="{{$contact1->phone}}" required>
+                            <input type="text" class="form-control" name="emergency_phone" value="{{$contact1?$contact1->phone:''}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人2</label>
-                            <input type="text" class="form-control" name="emergency_contact2" value="{{$contact2->name}}" required>
+                            <input type="text" class="form-control" name="emergency_contact2" value="{{$contact2?$contact2->name:''}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人2 电话</label>
-                            <input type="text" class="form-control" name="emergency_phone2" value="{{$contact2->phone}}" required>
+                            <input type="text" class="form-control" name="emergency_phone2" value="{{$contact2?$contact2->phone:''}}" required>
                         </div>
                         @if(!$self_as_parent)
                             <div class="uk-form-row">
