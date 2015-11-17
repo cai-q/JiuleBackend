@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Management;
 
 use App\Member;
+use App\Relative;
 use App\Watch;
 use Illuminate\Http\Request;
 
@@ -52,7 +53,44 @@ class WatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'pid' => 'required|exists:mysql_old.member',
+            'uname' => 'required',
+            'emergency_contact' => 'required',
+            'emergency_contact2' => 'required',
+            'emergency_phone' => 'required',
+            'emergency_phone2' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+        $pid = $request->input('pid');
+        $umane = $request->input('uname');
+
+        $emergency_contact = $request->input('emergency_contact');
+        $emergency_contact2 = $request->input('emergency_contact2');
+        $emergency_phone = $request->input('emergency_phone');
+        $emergency_phone2 = $request->input('emergency_phone2');
+
+        $member = Member::where('pid', $pid)->first();
+        $member->uname = $umane;
+        $member->save();
+
+        $relative = new Relative();
+        $relative->name = $emergency_contact;
+        $relative->phone = $emergency_phone;
+        $relative->mid = $member->id;
+        $relative->main = 1;
+        $relative->save();
+
+        $relative = new Relative();
+        $relative->name = $emergency_contact;
+        $relative->phone = $emergency_phone;
+        $relative->mid = $member->id;
+        $relative->main = 0;
+        $relative->save();
+
+        return redirect()->back()->with('success', true);
     }
 
     /**

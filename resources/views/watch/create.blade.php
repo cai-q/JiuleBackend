@@ -15,34 +15,33 @@
                         <legend>添加手表</legend>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">企业编号</label>
-                            <input type="text" class="form-control" name="serial" required>
+                            <label  class="uk-form-label">序列号</label>
+                            <input type="text" class="form-control" name="pid" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">登陆邮箱</label>
-                            <input type="email" class="form-control" name="email" required>
+                            <label  class="uk-form-label">负责人</label>
+                            <input type="text" class="form-control" name="uname" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">企业名称</label>
-                            <input type="text" class="form-control" name="name" required>
+                            <label  class="uk-form-label">紧急联系人</label>
+                            <input type="text" class="form-control" name="emergency_contact" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">联系人</label>
-                            <input type="text" class="form-control" name="contact_name" required>
+                            <label  class="uk-form-label">紧急联系人 电话</label>
+                            <input type="text" class="form-control" name="emergency_phone" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">联系电话</label>
-                            <input type="text" class="form-control" name="contact_phone" required>
+                            <label  class="uk-form-label">紧急联系人2</label>
+                            <input type="text" class="form-control" name="emergency_contact2" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">登陆密码</label>
-                            <input type="password" class="form-control" name="password" required>
+                            <label  class="uk-form-label">紧急联系人2 电话</label>
+                            <input type="text" class="form-control" name="emergency_phone2" required>
                         </div>
-
                         @if(!$self_as_parent)
                             <div class="uk-form-row">
                                 <label  class="uk-form-label">所属企业</label>
-                                <select name="parent_id">
+                                <select name="fid">
                                     <option value="0">无</option>
                                     @foreach($parents as $parent)
                                         <option value="{{$parent->id}}">{{$parent->name}}</option>
@@ -52,7 +51,7 @@
                         @else
                             <div class="uk-form-row">
                                 <label  class="uk-form-label">所属企业</label>
-                                <select name="parent_id" disabled>
+                                <select name="fid" disabled>
                                     @foreach($parents as $parent)
                                         <option value="{{$parent->id}}">{{$parent->name}}</option>
                                     @endforeach
