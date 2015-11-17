@@ -12,11 +12,11 @@
             <div class="uk-panel">
                 <form class="uk-form uk-container-center uk-form-horizontal" role="form" method="POST" action="{{ url('watch') }}">
                     <fieldset data-uk-margin>
-                        <legend>添加手表</legend>
+                        <legend>编辑手表信息</legend>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="uk-form-row">
                             <label  class="uk-form-label">序列号</label>
-                            <input type="text" class="form-control" name="pid" value="{{$member->pid}}" required>
+                            <input type="text" class="form-control" name="pid" value="{{$member->pid}}" required readonly>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">负责人</label>
@@ -51,9 +51,9 @@
                         @else
                             <div class="uk-form-row">
                                 <label  class="uk-form-label">所属企业</label>
-                                <select name="fid" disabled>
+                                <select name="fid">
                                     @foreach($parents as $parent)
-                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                        <option value="{{$parent->id}}" selected="selected">{{$parent->name}}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -51,9 +51,9 @@
                         @else
                             <div class="uk-form-row">
                                 <label  class="uk-form-label">所属企业</label>
-                                <select name="fid" disabled>
+                                <select name="fid">
                                     @foreach($parents as $parent)
-                                        <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                        <option value="{{$parent->id}}" selected="selected">{{$parent->name}}</option>
                                     @endforeach
                                 </select>
                             </div>

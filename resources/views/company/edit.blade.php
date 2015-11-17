@@ -36,10 +36,6 @@
                             <input type="text" class="form-control" name="contact_phone" value="{{$item->contact_phone}}" required>
                         </div>
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">父级企业</label>
-                            <input type="text" class="form-control" name="contact_phone" value="{{$item->parent_id != 1 ? \App\User::find($item->parent_id)->serial : '无'}}" required disabled>
-                        </div>
-                        <div class="uk-form-row">
                             <label  class="uk-form-label">企业地址</label>
                             <input type="text" class="form-control" name="address" value="{{$item->address}}">
                         </div>

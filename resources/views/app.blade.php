@@ -111,13 +111,13 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ url('/admin/statistic/index') }}">
+                                            <a href="{{ url('/watch/create') }}">
                                                 新增绑定
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ url('/admin/statistic/online-walkers') }}">
-                                                激活手表
+                                            <a href="{{ url('/watch/activate-list') }}">
+                                                批量激活
                                             </a>
                                         </li>
                                         <li class="uk-nav-divider"></li>

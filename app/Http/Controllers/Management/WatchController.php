@@ -26,7 +26,7 @@ class WatchController extends Controller
      */
     public function index()
     {
-        if (\Auth::user()->usertype == 0) {
+        if (\Auth::user()->user_type == 0) {
             $items = Member::paginate(10);
         } else {
             $items = Member::where('fid', '=', \Auth::user()->id)->paginate(10);
@@ -90,14 +90,20 @@ class WatchController extends Controller
         $member->fid = $fid;
         $member->save();
 
-        $relative = new Relative();
+        $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
+        if (!$relative) {
+            $relative = new Relative();
+        }
         $relative->name = $emergency_contact;
         $relative->phone = $emergency_phone;
         $relative->mid = $member->id;
         $relative->main = 1;
         $relative->save();
 
-        $relative = new Relative();
+        $relative = Relative::where('mid', $member->id)->where('main', 0)->first();
+        if (!$relative) {
+            $relative = new Relative();
+        }
         $relative->name = $emergency_contact2;
         $relative->phone = $emergency_phone2;
         $relative->mid = $member->id;

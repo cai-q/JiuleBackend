@@ -73,6 +73,8 @@ class CompanyController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
+        dd($request->input('parent_id'));
+
         $list = [
             'name',
             'email',
