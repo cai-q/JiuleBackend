@@ -54,7 +54,7 @@
                     <?php $now = \Carbon\Carbon::now()?>
                     @foreach($items as $item)
                         <tr>
-                            <td>{{\App\Member::where('id', $item->userid)->user_id}}</td>
+                            <td>{{\App\Member::where('id', $item->userid)->first()->user_id}}</td>
                             <td>{{$item->spo2}}</td>
                             <td>{{$item->heartrate}}</td>
                             <td>{{$item->breath}}</td>
