@@ -254,4 +254,14 @@ class WatchController extends Controller
             'success' => true
         ]);
     }
+
+    public function getMultipleCreate(Request $request)
+    {
+        return view('watch.multiple_create');
+    }
+
+    public function postMultipleCreate(Request $request)
+    {
+
+    }
 }

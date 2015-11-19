@@ -14,7 +14,8 @@
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
                 @if(Auth::user()->user_type == 1)
-                    <a href="{{url('/watch/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i> 新增手表</a>
+                    <a href="{{url('/watch/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i>新增手表</a>
+                    <a href="{{url('/watch/multiple-create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i>批量导入</a>
                 @endif
                 <div style="display: inline-block;" id="search">
                     <form class="uk-search" data-uk-search action="{{url('/watch/search')}}">

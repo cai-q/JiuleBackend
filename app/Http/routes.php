@@ -44,6 +44,10 @@ Route::any('warning/search', 'Management\WarningController@getSearch');
 //手表激活服务
 Route::any('watch/activate', 'Management\WatchController@getActivate');
 
+//手表批量导入
+Route::get('watch/multiple-create', 'Management\WatchController@getMultipleCreate');
+Route::post('watch/multiple-create', 'Management\WatchController@postMultipleCreate');
+
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
