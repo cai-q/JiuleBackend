@@ -13,9 +13,6 @@
     <div class="uk-grid uk-grid-collapse">
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
-                @if(Auth::user()->user_type == 1)
-                    <a href="{{url('/watch/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i> 新增手表</a>
-                @endif
                 <div style="display: inline-block;" id="search">
                     <form class="uk-search" data-uk-search action="{{url('/warning/search')}}">
                         <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
@@ -55,7 +52,7 @@
                         <?php $now = \Carbon\Carbon::now()?>
                         @foreach($items as $item)
                             <tr>
-                                <td>{{\App\Member::where('id', $item->userid)->first()->user_id}}</td>
+                                <td>{{$item->userid}}</td>
                                 <td>{{$item->spo2}}</td>
                                 <td>{{$item->heartrate}}</td>
                                 <td>{{$item->breath}}</td>

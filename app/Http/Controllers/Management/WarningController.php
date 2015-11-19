@@ -27,22 +27,10 @@ class WarningController extends Controller
     public function index()
     {
         if (\Auth::user()->user_type == 0) {
-            $items = Warning::paginate(10);
+            $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')->select('*')->addSelect('member.userid')->paginate(10);
         } else {
-//            $sub_companies = User::where('parent_id', \Auth::user()->id)
-//                ->select('id')
-//                ->get()
-//                ->pluck('id')
-//                ->toArray();
-
-            $members = Member::where('fid', \Auth::user()->id)
-                ->select('id')
-                ->get()
-                ->pluck('id')
-                ->toArray();
-
-            $items = Warning::whereIn('userid', $members)->paginate(10);
-
+            $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')->select('*')->addSelect('member.userid')
+                ->where('member.fid', \Auth::user()->id)->paginate(10);
         }
 
         return view('warning.index')->with([
@@ -122,16 +110,18 @@ class WarningController extends Controller
 
         if (\Auth::user()->user_type == 0) {
             $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')
+                ->select('*')->addSelect('member.userid')
                 ->where('member.userid', 'like', $key)
                 ->orWhere('member.pid', 'like', $key);
         } else {
             $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')
+                ->select('*')->addSelect('member.userid')
                 ->where('member.userid', 'like', $key)
                 ->orWhere('member.pid', 'like', $key)
                 ->where('member.fid', '=', \Auth::user()->id);
         }
 
-        return view('watch.index')->with([
+        return view('warning.index')->with([
             'items' => $items->paginate(10)
         ]);
     }
