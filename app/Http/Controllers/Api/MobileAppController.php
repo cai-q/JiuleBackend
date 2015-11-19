@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Member;
+use App\User;
 use Illuminate\Http\Request;
 use \Validator;
 use DB;
@@ -74,10 +75,12 @@ class MobileAppController extends Controller
 //        $a = DB::connection('mysql_old')->table('member')->join('product_ext', 'member.pid', '=', 'product_ext.pid')->get();
 //        dd($a);
 
-        $a = DB::connection('mysql_old')
-            ->table('product_ext')
-            ->where('pid', '1262710000181')
-            ->first()->saled;
-        dd($a);
+//        $a = DB::connection('mysql_old')
+//            ->table('product_ext')
+//            ->where('pid', '1262710000181')
+//            ->first()->saled;
+//        dd($a);
+
+        dd(User::where('parent_id', 2)->select('id')->get()->pluck('id')->toArray());
     }
 }

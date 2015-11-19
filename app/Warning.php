@@ -13,5 +13,5 @@ class Warning extends Model
 {
     protected $connection = 'mysql_old';
 
-    protected $table = 'data_warn';
+    protected $table = 'data_warn_save';
 }
