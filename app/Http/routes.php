@@ -39,6 +39,7 @@ Route::post('password/reset', 'Auth\PasswordController@postReset');
 //独立的搜索服务
 Route::any('company/search', 'Management\CompanyController@getSearch');
 Route::any('watch/search', 'Management\WatchController@getSearch');
+Route::any('warning/search', 'Management\WarningController@getSearch');
 
 //手表激活服务
 Route::any('watch/activate', 'Management\WatchController@getActivate');

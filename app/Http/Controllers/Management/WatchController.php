@@ -234,7 +234,7 @@ class WatchController extends Controller
             $items = Member
                 ::where('pid', 'like', $key)
                 ->orWhere('userid', 'like', $key)
-                ->where('parent_id', '=', \Auth::user()->id);
+                ->where('fid', '=', \Auth::user()->id);
         }
 
 

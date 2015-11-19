@@ -115,4 +115,24 @@ class WarningController extends Controller
     {
         //
     }
+
+    public function getSearch(Request $request)
+    {
+        $key = '%' . $request->input('key') . '%';
+
+        if (\Auth::user()->user_type == 0) {
+            $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')
+                ->where('member.userid', 'like', $key)
+                ->orWhere('member.pid', 'like', $key);
+        } else {
+            $items = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')
+                ->where('member.userid', 'like', $key)
+                ->orWhere('member.pid', 'like', $key)
+                ->where('member.fid', '=', \Auth::user()->id);
+        }
+
+        return view('watch.index')->with([
+            'items' => $items->paginate(10)
+        ]);
+    }
 }

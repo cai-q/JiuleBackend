@@ -81,6 +81,8 @@ class MobileAppController extends Controller
 //            ->first()->saled;
 //        dd($a);
 
-        dd(User::where('parent_id', 2)->select('id')->get()->pluck('id')->toArray());
+//        dd(User::where('parent_id', 2)->select('id')->get()->pluck('id')->toArray());
+        $a = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')->first();
+        dd($a);
     }
 }
