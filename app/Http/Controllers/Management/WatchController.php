@@ -248,6 +248,9 @@ class WatchController extends Controller
         $id = $request->input('pid');
         $member = Member::find($id);
         $member->status = 0;
+        if (\Auth::user()->user_type != 0) {
+            $member->fid = \Auth::user()->id;
+        }
         $member->save();
 
         return redirect()->back()->with([
@@ -262,6 +265,39 @@ class WatchController extends Controller
 
     public function postMultipleCreate(Request $request)
     {
+    }
 
+    public function getSendMessageToCompany(Request $request)
+    {
+
+    }
+
+    public function getSendMessageToUser(Request $request)
+    {
+
+    }
+
+    protected function sendMsg($msg,$to){
+
+        $SpCode='203192';
+        $LoginName='wh_jl';
+        $Password='jl0807';
+        $UserNumber=trim($to);
+        $content = $msg;
+        $content = iconv("utf-8","GBK//IGNORE",$content);
+        //$content = rawurlencode($content);
+        $url="http://hb.ums86.com:8899/sms/Api/Send.do?SpCode=".$SpCode."&LoginName=".$LoginName."&Password=".$Password."&MessageContent=".$content."&UserNumber=".$UserNumber."&SerialNumber=&ScheduleTime=&f=1";
+        //echo $url;
+        @$status = file_get_contents($url);
+        //echo $status;
+        //记录
+
+        \DB::connection('mysql_old')->table('smslog1')->insert([
+            'phone' => $to,
+            'text' => $msg,
+            'time' => time(),
+            'status' => iconv("GBK","utf-8//IGNORE",$status),
+            'send' => $status
+        ]);
     }
 }

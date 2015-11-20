@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 
 class MobileAppController extends Controller
 {
-    public function getLogin(Request $request)
+    public function postLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|exists:mysql_old.member,userid',

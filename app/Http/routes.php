@@ -51,6 +51,11 @@ Route::post('watch/multiple-create', 'Management\WatchController@postMultipleCre
 //高德地图模块
 Route::get('warning/gaode', 'Management\WarningController@getGaode');
 
+//发送短信服务
+Route::get('watch/send-message-to-company', 'Management\WatchController@getSendMessageToCompany');
+Route::get('watch/send-message-to-user', 'Management\WatchController@getSendMessageToUser');
+
+
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
