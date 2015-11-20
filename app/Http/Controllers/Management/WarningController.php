@@ -125,4 +125,9 @@ class WarningController extends Controller
             'items' => $items->paginate(10)
         ]);
     }
+
+    public function getGaode()
+    {
+        return view('warning.gaode');
+    }
 }

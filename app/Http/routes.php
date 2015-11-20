@@ -48,6 +48,9 @@ Route::any('watch/activate', 'Management\WatchController@getActivate');
 Route::get('watch/multiple-create', 'Management\WatchController@getMultipleCreate');
 Route::post('watch/multiple-create', 'Management\WatchController@postMultipleCreate');
 
+//高德地图模块
+Route::get('warning/gaode', 'Management\WarningController@getGaode');
+
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理
