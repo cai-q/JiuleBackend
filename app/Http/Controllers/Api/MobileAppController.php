@@ -47,7 +47,8 @@ class MobileAppController extends Controller
             ]);
         } else {
             return response()->json([
-                'error' => '密码错误'
+                'success' => false,
+                'error_message' => '密码错误'
             ]);
         }
 
@@ -74,7 +75,7 @@ class MobileAppController extends Controller
     public function postActivate(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'indexCode' => 'required|exists:mysql_old.member.pid',
+            'indexCode' => 'required|exists:mysql_old.member,pid',
             'username' => 'required',
             'phoneNumber' => 'required',
             'name1' => 'required',
@@ -83,7 +84,7 @@ class MobileAppController extends Controller
             'phoneNumber2' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->getMessages()]);
+            return response()->json(['success' => false, 'error_message' => $validator->errors()->getMessages()]);
         }
 
         $pid = $request->input('indexCode');

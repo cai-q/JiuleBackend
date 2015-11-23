@@ -25,96 +25,94 @@
                                placeholder="在此输入搜索...">
                     </form>
                 </div>
-                <div class="uk-overflow-container">
-                    <table class="uk-table uk-table-hover uk-table-striped">
-                        <caption>手表管理</caption>
-                        <thead>
-                        <tr>
-                            <th>序列号</th>
-                            <th>登陆名</th>
-                            <th>是否出库</th>
-                            <th>是否激活</th>
-                            <th>是否活跃</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <table class="uk-table uk-table-hover uk-table-striped">
+                    <caption>手表管理</caption>
+                    <thead>
+                    <tr>
+                        <th>序列号</th>
+                        <th>登陆名</th>
+                        <th>是否出库</th>
+                        <th>是否激活</th>
+                        <th>是否活跃</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                        <?php $now = \Carbon\Carbon::now()?>
-                        @foreach($items as $item)
-                            <tr>
-                                <td>
-                                    <i class="uk-badge uk-badge-warning">
-                                        {{$item->pid}}
+                    <?php $now = \Carbon\Carbon::now()?>
+                    @foreach($items as $item)
+                        <tr>
+                            <td>
+                                <i class="uk-badge uk-badge-warning">
+                                    {{$item->pid}}
+                                </i>
+                            </td>
+                            <td>{{$item->userid}}</td>
+                            <td>
+                                @if(($a = DB::connection('mysql_old')->table('product_ext')->where('pid', ''.$item->pid)->first()) != null)
+                                    @if($a->saled == 1)
+                                        <i class="uk-badge uk-badge-success">
+                                            已售出
+                                        </i>
+                                    @else
+                                        <i class="uk-badge uk-badge-danger">
+                                            未售出
+                                        </i>
+                                    @endif
+                                @else
+                                    <i class="uk-badge uk-badge-danger">
+                                        未查询到
                                     </i>
-                                </td>
-                                <td>{{$item->userid}}</td>
-                                <td>
-                                    @if(($a = DB::connection('mysql_old')->table('product_ext')->where('pid', ''.$item->pid)->first()) != null)
-                                        @if($a->saled == 1)
-                                            <i class="uk-badge uk-badge-success">
-                                                已售出
-                                            </i>
-                                        @else
-                                            <i class="uk-badge uk-badge-danger">
-                                                未售出
-                                            </i>
-                                        @endif
-                                    @else
-                                        <i class="uk-badge uk-badge-danger">
-                                            未查询到
-                                        </i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($item->status == 0)
-                                        <i class="uk-badge uk-badge-success">
-                                            已激活
-                                        </i>
-                                    @else
-                                        <i class="uk-badge uk-badge-error">
-                                            未激活
-                                        </i>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if(\Carbon\Carbon::createFromTimestamp($item->logintime, 'Asia/Shanghai')->diffInDays($now) <= ($item->fid&&($u = \App\User::find($item->fid))?$u->expire_days:7))
-                                        <i class="uk-badge uk-badge-success">
-                                            活跃
-                                        </i>
-                                    @else
-                                        <i class="uk-badge uk-badge-danger">
-                                            不活跃
-                                        </i>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div style="display: inline-block; position: relative;"
-                                         data-uk-dropdown="{mode:'click'}">
-                                        <button class="uk-button">
-                                            操作
-                                            <i class="uk-icon-caret-down"></i>
-                                        </button>
-                                        <div class="uk-dropdown">
-                                            <ul class="uk-nav uk-nav-dropdown">
-                                                @if($item->status == 0)
-                                                    <li><a class="uk-text-"
-                                                           href="{{url('watch/'. $item->id . '/edit')}}">编辑资料</a></li>
-                                                @else
-                                                    <li><a class="uk-text-"
-                                                           href="{{url('watch/activate?pid='.$item->id)}}">一键激活</a></li>
-                                                @endif
-                                            </ul>
-                                        </div>
+                                @endif
+                            </td>
+                            <td>
+                                @if($item->status == 0)
+                                    <i class="uk-badge uk-badge-success">
+                                        已激活
+                                    </i>
+                                @else
+                                    <i class="uk-badge uk-badge-error">
+                                        未激活
+                                    </i>
+                                @endif
+                            </td>
+                            <td>
+                                @if(\Carbon\Carbon::createFromTimestamp($item->logintime, 'Asia/Shanghai')->diffInDays($now) <= ($item->fid&&($u = \App\User::find($item->fid))?$u->expire_days:7))
+                                    <i class="uk-badge uk-badge-success">
+                                        活跃
+                                    </i>
+                                @else
+                                    <i class="uk-badge uk-badge-danger">
+                                        不活跃
+                                    </i>
+                                @endif
+                            </td>
+                            <td>
+                                <div style="display: inline-block; position: relative;"
+                                     data-uk-dropdown="{mode:'click'}">
+                                    <button class="uk-button">
+                                        操作
+                                        <i class="uk-icon-caret-down"></i>
+                                    </button>
+                                    <div class="uk-dropdown">
+                                        <ul class="uk-nav uk-nav-dropdown">
+                                            @if($item->status == 0)
+                                                <li><a class="uk-text-"
+                                                       href="{{url('watch/'. $item->id . '/edit')}}">编辑资料</a></li>
+                                            @else
+                                                <li><a class="uk-text-"
+                                                       href="{{url('watch/activate?pid='.$item->id)}}">一键激活</a></li>
+                                            @endif
+                                        </ul>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                {!! $items->render() !!}
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
+            {!! $items->render() !!}
         </div>
     </div>
 @endsection
