@@ -51,11 +51,6 @@
                                             企业管理
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ url('/member') }}">
-                                            用户管理
-                                        </a>
-                                    </li>
                                     <li class="uk-nav-divider"></li>
                                     <li class="uk-nav-header">
                                         手表及报警管理
@@ -179,11 +174,6 @@
                             <li>
                                 <a href="{{ url('/company') }}">
                                     企业管理
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/member') }}">
-                                    用户管理
                                 </a>
                             </li>
                         </ul>

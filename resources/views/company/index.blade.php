@@ -19,6 +19,7 @@
                         <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
                     </form>
                 </div>
+                <div class="uk-overflow-container">
                 <table class="uk-table uk-table-hover uk-table-striped">
                     <caption>所有企业账号</caption>
                     <thead>
@@ -84,19 +85,20 @@
                                 </i>
                             </td>
                             <td>
-                                <a class="uk-button uk-form-horizontal" href="/company/{{$item->id}}/edit">编辑资料</a>
+                                <a class="uk-button uk-form-horizontal" href="/company/{{$item->id}}/edit">编辑</a>
                             </td>
                             <td>
                                 <form class="uk-form uk-form-horizontal" action="/company/{{$item->id}}" method="post">
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="uk-button">删除记录</button>
+                                    <button type="submit" class="uk-button">删除</button>
                                 </form>
                             </td>
                         </tr>
                     @endforeach
                     </tbody>
                 </table>
+                </div>
                 {!! $items->render() !!}
             </div>
         </div>

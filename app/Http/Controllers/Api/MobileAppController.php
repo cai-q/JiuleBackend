@@ -82,7 +82,20 @@ class MobileAppController extends Controller
 //        dd($a);
 
 //        dd(User::where('parent_id', 2)->select('id')->get()->pluck('id')->toArray());
-        $a = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')->select('*')->addSelect('member.userid')->first();
-        dd($a);
+//        $a = Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')->select('*')->addSelect('member.userid')->first();
+//        dd($a);
+
+        \Excel::load('/home/jiule-backend/JiuleBackend/storage/test.xslt', function ($reader) {
+
+//            dd($reader->get(['A'])->toArray());
+            $array = $reader->get()->toArray();
+            $result = [];
+            foreach ($array as $item) {
+                if ($item[0]) {
+                    $result []= intval($item[0]);
+                }
+            }
+            dd($result);
+        });
     }
 }

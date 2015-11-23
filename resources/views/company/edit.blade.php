@@ -43,6 +43,10 @@
                             <label  class="uk-form-label">营业执照</label>
                             <input type="text" class="form-control" name="certificate" value="{{$item->certificate}}">
                         </div>
+                        <div class="uk-form-row">
+                            <label  class="uk-form-label">手表不活跃时间</label>
+                            <input type="number" class="form-control" name="expire_days" value="{{$item->expire_days}}" required>
+                        </div>
 
                     </fieldset>
                     <fieldset>

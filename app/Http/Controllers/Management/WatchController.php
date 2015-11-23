@@ -265,6 +265,46 @@ class WatchController extends Controller
 
     public function postMultipleCreate(Request $request)
     {
+        $excel = $request->file('watch');
+        $target = $excel->move(storage_path(), 'test.xslt');
+
+        \Excel::load($target, function ($reader) {
+            $array = $reader->get()->toArray();
+            $result = [];
+            foreach ($array as $item) {
+                if ($item[0]) {
+                    $result []= $item[0];
+                }
+            }
+
+            foreach ($result as $item) {
+                if ($member = Member::where('pid', intval($item))->first()) {
+                    $member->fid = \Auth::user()->id;
+                    $member->uname = \Auth::user()->contact_name;
+
+                    $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
+                    if (!$relative) {
+                        $relative = new Relative();
+                    }
+                    $relative->name = \Auth::user()->contact_name;
+                    $relative->phone = \Auth::user()->contact_phone;
+                    $relative->mid = $member->id;
+                    $relative->main = 1;
+                    $relative->save();
+
+
+                    $member->save();
+                }
+            }
+        });
+
+        if (\Auth::user()->user_type == 0) {
+            $items = Member::paginate(10);
+        } else {
+            $items = Member::where('fid', '=', \Auth::user()->id)->paginate(10);
+        }
+
+        return view('watch.index')->with(['success' => true, 'items' => $items]);
     }
 
     public function getSendMessageToCompany(Request $request)

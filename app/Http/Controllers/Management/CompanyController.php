@@ -73,8 +73,6 @@ class CompanyController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        dd($request->input('parent_id'));
-
         $list = [
             'name',
             'email',
@@ -135,7 +133,8 @@ class CompanyController extends Controller
             'address',
             'certificate',
             'contact_name',
-            'contact_phone'
+            'contact_phone',
+            'expire_days'
         ];
 
         $user = User::find($id);

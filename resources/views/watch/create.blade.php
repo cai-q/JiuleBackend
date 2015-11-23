@@ -20,15 +20,15 @@
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">负责人</label>
-                            <input type="text" class="form-control" name="uname" required>
+                            <input type="text" class="form-control" name="uname" value="{{\Auth::user()->contact_name}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人</label>
-                            <input type="text" class="form-control" name="emergency_contact" required>
+                            <input type="text" class="form-control" name="emergency_contact" value="{{\Auth::user()->contact_name}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人 电话</label>
-                            <input type="text" class="form-control" name="emergency_phone" required>
+                            <input type="text" class="form-control" name="emergency_phone" value="{{\Auth::user()->contact_phone}}" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">紧急联系人2</label>
