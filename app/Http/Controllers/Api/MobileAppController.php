@@ -26,23 +26,24 @@ class MobileAppController extends Controller
             ]);
         }
 
-        \Log::error('123456');
-
         $user_name = $request->input('username');
         $password = $request->input('password');
 
         $user = Member::where('userid', '=', $user_name)->first();
         if ($user->pwd == strrev(md5($password))) {
             return response()->json([
-                'userid' => $user->userid,
-                'username' => $user->uname,
-                'usertype' => $user->usertype,
-                'nickname' => $user->cname,
-                'mobile' => $user->tphone
-                //'credits' => $user->
-                //'hdpurl' => $user->
-                //'xm' =>
-                //TODO find credits column
+                'success' => true,
+                'result' => [
+                    'userid' => $user->userid,
+                    'username' => $user->uname,
+                    'usertype' => $user->usertype,
+                    'nickname' => $user->cname,
+                    'mobile' => $user->tphone
+                    //'credits' => $user->
+                    //'hdpurl' => $user->
+                    //'xm' =>
+                    //TODO find credits column
+                ]
             ]);
         } else {
             return response()->json([
@@ -61,6 +62,7 @@ class MobileAppController extends Controller
     public function postUpdate(Request $request)
     {
         return response()->json([
+            'success' => true,
             'version' => 'undefined',
             'updatemsg' => 'undefined',
             'updateflag' => 'undefined',
@@ -140,13 +142,16 @@ class MobileAppController extends Controller
         $member = Member::where('userid', $userid)->first();
 
         return response()->json([
-            'bloodOxygen' => '',
-            'heartRate' => '',
-            'activity' => '',
-            'sleep' => '',
-            'urgentCall' => '',
-            'callPolice' => '',
-            'lifeWarning' => ''
+            'success' => true,
+            'result' => [
+                'bloodOxygen' => '',
+                'heartRate' => '',
+                'activity' => '',
+                'sleep' => '',
+                'urgentCall' => '',
+                'callPolice' => '',
+                'lifeWarning' => ''
+            ]
         ]);
     }
 
@@ -182,6 +187,7 @@ class MobileAppController extends Controller
         $user = Member::where('userid', '=', $user_name)->first();
         if ($user->pwd == strrev(md5($password))) {
             return response()->json([
+                'success' => true,
                 'userid' => $user->userid,
                 'username' => $user->uname,
                 'usertype' => $user->usertype,

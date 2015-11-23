@@ -78,7 +78,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(\Carbon\Carbon::createFromTimestamp($item->logintime, 'Asia/Shanghai')->diffInDays($now) <= ($item->fid?\App\User::find($item->fid)->expire_days:7))
+                                    @if(\Carbon\Carbon::createFromTimestamp($item->logintime, 'Asia/Shanghai')->diffInDays($now) <= ($item->fid&&($u = \App\User::find($item->fid))?$u->expire_days:7))
                                         <i class="uk-badge uk-badge-success">
                                             活跃
                                         </i>
