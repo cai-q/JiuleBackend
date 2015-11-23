@@ -64,7 +64,6 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'serial' => 'required',
             'email' => 'required|unique:users',
             'name' => 'required',
             'password' => 'required'
@@ -76,7 +75,6 @@ class CompanyController extends Controller
         $list = [
             'name',
             'email',
-            'serial',
             'parent_id',
             'contact_name',
             'contact_phone'

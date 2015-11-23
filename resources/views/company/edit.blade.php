@@ -16,10 +16,6 @@
                         {{ method_field('PUT') }}
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">企业编号</label>
-                            <input type="text" class="form-control" name="serial" value="{{$item->serial}}" required disabled>
-                        </div>
-                        <div class="uk-form-row">
                             <label  class="uk-form-label">登陆邮箱</label>
                             <input type="email" class="form-control" name="email" value="{{$item->email}}" required disabled>
                         </div>

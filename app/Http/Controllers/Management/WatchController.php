@@ -175,7 +175,7 @@ class WatchController extends Controller
             return redirect()->back()->withErrors($validator);
         }
         $pid = $request->input('pid');
-        $umane = $request->input('uname');
+        $uname = $request->input('uname');
         $fid = $request->input('fid');
 
         $emergency_contact = $request->input('emergency_contact');
@@ -184,7 +184,7 @@ class WatchController extends Controller
         $emergency_phone2 = $request->input('emergency_phone2');
 
         $member = Member::where('pid', $pid)->first();
-        $member->uname = $umane;
+        $member->uname = $uname;
         $member->fid = $fid;
         $member->save();
 
