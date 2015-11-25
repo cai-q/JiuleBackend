@@ -166,6 +166,7 @@ class CompanyController extends Controller
 
     public function getSearch(Request $request)
     {
+        $init_key = $request->input('key');
         $key = '%' . $request->input('key') . '%';
 
         if (\Auth::user()->user_type == 0) {
@@ -185,7 +186,64 @@ class CompanyController extends Controller
 
 
         return view('company.index')->with([
-            'items' => $items->paginate(10)
+            'items' => $items->paginate(10),
+            'key' => $init_key
         ]);
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCreateWatcher()
+    {
+        $self_as_parent = false;
+        if (\Auth::user()->user_type == 0) {
+            $parents = User::where('user_type', 1)->get();
+        } else {
+            abort(404);
+        }
+
+        return view('company.create_watcher');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postCreateWatcher(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required|unique:users',
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $list = [
+            'name',
+            'email',
+            'parent_id',
+            'contact_name',
+            'contact_phone'
+        ];
+
+        $user = new User();
+        foreach ($list as $enum) {
+            if ($request->has($enum)) {
+                $user->$enum = $request->input($enum);
+            }
+        }
+
+        $user->password = bcrypt($request->input('password'));
+        $user->user_type = 2;
+        $user->save();
+
+        return redirect()->back()->with('success', true);
     }
 }

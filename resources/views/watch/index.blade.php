@@ -112,7 +112,7 @@
                     </tbody>
                 </table>
             </div>
-            {!! $items->render() !!}
+            {!! $items->appends(['key' => isset($key)?$key:''])->render() !!}
         </div>
     </div>
 @endsection

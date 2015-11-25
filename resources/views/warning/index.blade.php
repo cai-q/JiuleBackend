@@ -6,6 +6,7 @@
     <link href="{{ asset('/css/components/slidenav.almost-flat.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/components/dotnav.almost-flat.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/components/search.almost-flat.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/components/datepicker.almost-flat.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 @endsection
 
@@ -14,8 +15,21 @@
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
                 <div style="display: inline-block;" id="search">
-                    <form class="uk-search" data-uk-search action="{{url('/warning/search')}}">
-                        <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
+                    <form  data-uk-search action="{{url('/warning/search')}}">
+                        <select id="se1" name="select">
+                            <option value="time">时间段</option>
+                            <option value="userid">用户名</option>
+                            <option value="pid">序列号</option>
+                        </select>
+                        <span id="op2" class="uk-hidden">
+                            <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
+                        </span>
+                        <span id="op1">
+                            <input class="uk-form-small" name="start" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="开始日期" readonly>
+                            -
+                            <input class="uk-form-small" name="end" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="结束日期" readonly>
+                        </span>
+                        <button class="uk-button uk-button-small" type="submit">搜索</button>
                     </form>
                 </div>
                 <div class="uk-overflow-container">
@@ -59,7 +73,7 @@
                         </tbody>
                     </table>
                 </div>
-                {!! $items->render() !!}
+                {!! $items->appends(['key' => isset($key)?$key:'', 'start' => isset($start)?$start:'', 'end' => isset($end)?$end:'', 'select' => isset($select)?$select:''])->render() !!}
             </div>
         </div>
     </div>
@@ -70,4 +84,20 @@
     <script src="{{ asset('/js/core/dropdown.min.js') }}"></script>
     <script src="{{ asset('/js/components/lightbox.min.js') }}"></script>
     <script src="{{ asset('/js/components/search.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#se1").change(function () {
+                a = $("#se1").val();
+                if (a == 'time') {
+                    $("#op2").addClass('uk-hidden');
+                    $("#op1").removeClass('uk-hidden');
+                } else {
+
+                    $("#op1").addClass('uk-hidden');
+                    $("#op2").removeClass('uk-hidden');
+                }
+            });
+        });
+    </script>
+    <script src="{{ asset('/js/components/datepicker.min.js') }}"></script>
 @endsection

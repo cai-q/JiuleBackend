@@ -60,8 +60,8 @@
     </div>
 </nav>
 
-<div class="uk-grid">
-    @if(!Auth::guest())
+<div class="">
+    @if(!Auth::guest() and $user->user_type != 2)
         <div class="uk-panel uk-panel-box uk-width-1-6">
             <h3 class="uk-panel-title">菜单</h3>
             <ul class="uk-nav uk-nav-side">
@@ -73,7 +73,17 @@
                         <ul class="uk-nav-sub">
                             <li>
                                 <a href="{{ url('/company') }}">
-                                    企业管理
+                                    用户管理
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/company/create') }}">
+                                    新增企业用户
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/company/create-watcher') }}">
+                                    新增监控用户
                                 </a>
                             </li>
                         </ul>
@@ -155,12 +165,15 @@
                             </li>
                         </ul>
                     </li>
+                @elseif($user->user_type == 2)
+
                 @endif
             </ul>
         </div>
     @endif
 
-    <div class="uk-panel uk-width-5-6">
+    @if(!Auth::guest() and $user->user_type != 2)
+        <div class="uk-panel uk-width-5-6">
         @if (count($errors) > 0)
             <div class="uk-alert uk-alert-danger">
                 <strong>Whoops!</strong> 看起来你输错了什么。<br><br>
@@ -177,9 +190,12 @@
                 <strong>操作成功!</strong>
             </div>
         @endif
+        </div>
 
         @yield('content')
-    </div>
+    @else
+        @yield('content')
+    @endif
 </div>
 
 <script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>

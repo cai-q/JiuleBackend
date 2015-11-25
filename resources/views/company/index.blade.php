@@ -43,7 +43,7 @@
                         <tr>
                             <td>
                                 <i class="uk-badge uk-badge-warning">
-                                    {{$item->serial}}
+                                    {{$item->id}}
                                 </i>
                             </td>
                             <td>{{$item->name}}</td>
@@ -55,6 +55,8 @@
                                     <i class="uk-badge" style="background-color: #d43f3a">管理员</i>
                                 @elseif($item->user_type == 1)
                                     <i class="uk-badge" style="background-color: #008abf">企业账号</i>
+                                @elseif($item->user_type == 2)
+                                    <i class="uk-badge" style="background-color: #bf7f6e">监控账号</i>
                                 @endif
                             </td>
                             <td>
@@ -99,7 +101,7 @@
                     </tbody>
                 </table>
                 </div>
-                {!! $items->render() !!}
+                {!! $items->appends(['key' => isset($key)?$key:''])->render() !!}
             </div>
         </div>
     </div>

@@ -16,6 +16,9 @@ Route::get('/', ['middleware' => 'auth', function () {
 }]);
 
 Route::get('/home', ['middleware' => 'auth', function () {
+    if (Auth::user()->user_type == 2) {
+        return view('warning.gaode');
+    }
     return view('home');
 }]);
 
@@ -55,6 +58,9 @@ Route::get('warning/gaode', 'Management\WarningController@getGaode');
 Route::get('watch/send-message-to-company', 'Management\WatchController@getSendMessageToCompany');
 Route::get('watch/send-message-to-user', 'Management\WatchController@getSendMessageToUser');
 
+//监控用户功能
+Route::get('company/create-watcher', 'Management\CompanyController@getCreateWatcher');
+Route::post('company/create-watcher', 'Management\CompanyController@postCreateWatcher');
 
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理

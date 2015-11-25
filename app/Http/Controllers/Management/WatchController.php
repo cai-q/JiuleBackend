@@ -224,6 +224,7 @@ class WatchController extends Controller
 
     public function getSearch(Request $request)
     {
+        $init_key = $request->input('key');
         $key = '%' . $request->input('key') . '%';
 
         if (\Auth::user()->user_type == 0) {
@@ -239,7 +240,8 @@ class WatchController extends Controller
 
 
         return view('watch.index')->with([
-            'items' => $items->paginate(10)
+            'items' => $items->paginate(10),
+            'key' => $init_key
         ]);
     }
 
