@@ -60,7 +60,11 @@
     </div>
 </nav>
 
-<div class="">
+@if(!Auth::guest() and $user->user_type != 2))
+<div class="uk-grid">
+@else
+<div>
+@endif
     @if(!Auth::guest() and $user->user_type != 2)
         <div class="uk-panel uk-panel-box uk-width-1-6">
             <h3 class="uk-panel-title">菜单</h3>
@@ -190,9 +194,8 @@
                 <strong>操作成功!</strong>
             </div>
         @endif
-        </div>
-
         @yield('content')
+        </div>
     @else
         @yield('content')
     @endif

@@ -15,8 +15,8 @@
                         <legend>添加企业账号</legend>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="uk-form-row">
-                            <label  class="uk-form-label">登陆邮箱</label>
-                            <input type="email" class="form-control" name="email" required>
+                            <label  class="uk-form-label">登陆名</label>
+                            <input type="text" class="form-control" name="email" required>
                         </div>
                         <div class="uk-form-row">
                             <label  class="uk-form-label">企业名称</label>
