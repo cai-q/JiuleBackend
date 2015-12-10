@@ -34,7 +34,8 @@ class CompanyController extends Controller
         }
 
         return view('company.index')->with([
-            'items' => $items->paginate(10)
+            'items' => $items->paginate(10),
+            'type' => $request->input('type', '')
         ]);
     }
 

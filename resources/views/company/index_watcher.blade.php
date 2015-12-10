@@ -20,18 +20,13 @@
                 </div>
                 <div class="uk-overflow-container">
                 <table class="uk-table uk-table-hover uk-table-striped">
-                    <caption>所有企业账号</caption>
+                    <caption>所有监控账号</caption>
                     <thead>
                     <tr>
-                        <th>企业编号</th>
-                        <th>企业名称</th>
-                        <th>企业地址</th>
-                        <th>营业执照</th>
-                        <th>登陆邮箱</th>
-                        <th>企业级别</th>
-                        <th>父级企业编号（如存在）</th>
                         <th>联系人</th>
                         <th>联系电话</th>
+                        <th>登陆邮箱</th>
+                        <th>企业级别</th>
                         <th>编辑资料</th>
                         <th>删除记录</th>
                     </tr>
@@ -40,14 +35,8 @@
 
                     @foreach($items as $item)
                         <tr>
-                            <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    {{$item->id}}
-                                </i>
-                            </td>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->address}}</td>
-                            <td>{{$item->certificate}}</td>
+                            <td>{{$item->contact_name}}</td>
+                            <td>{{$item->contact_phone}}</td>
                             <td>{{$item->email}}</td>
                             <td>
                                 @if($item->user_type == 0)
@@ -57,33 +46,6 @@
                                 @elseif($item->user_type == 2)
                                     <i class="uk-badge" style="background-color: #bf7f6e">监控账号</i>
                                 @endif
-                            </td>
-                            <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->parent_id && $item->parent_id != 1)
-                                        {{\App\User::find($item->parent_id)->serial}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
-                            </td>
-                            <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->contact_name && $item->contact_name != '')
-                                        {{$item->contact_name}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
-                            </td>
-                            <td>
-                                <i class="uk-badge uk-badge-warning">
-                                    @if($item->contact_phone && $item->contact_phone != '')
-                                        {{$item->contact_phone}}
-                                    @else
-                                        无
-                                    @endif
-                                </i>
                             </td>
                             <td>
                                 <a class="uk-button uk-form-horizontal" href="/company/{{$item->id}}/edit">编辑</a>
