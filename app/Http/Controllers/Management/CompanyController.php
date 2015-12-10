@@ -33,10 +33,22 @@ class CompanyController extends Controller
             $items = User::where('parent_id', \Auth::user()->id);
         }
 
-        return view('company.index')->with([
-            'items' => $items->paginate(10),
-            'type' => $request->input('type', '')
-        ]);
+        if ($request->has('type') and $request->input('type') == 1) {
+            return view('company.index')->with([
+                'items' => $items->paginate(10),
+                'type' => $request->input('type', '')
+            ]);
+        } elseif ($request->has('type') and $request->input('type') == 2) {
+            return view('company.index_watcher')->with([
+                'items' => $items->paginate(10),
+                'type' => $request->input('type', '')
+            ]);
+        } else {
+            return view('company.index')->with([
+                'items' => $items->paginate(10),
+                'type' => $request->input('type', '')
+            ]);
+        }
     }
 
     /**
