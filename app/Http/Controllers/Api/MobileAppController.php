@@ -18,7 +18,7 @@ class MobileAppController extends Controller
     public function postLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|exists:mysql_old.member,userid',
+            'username' => 'required',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
@@ -32,6 +32,17 @@ class MobileAppController extends Controller
         $password = $request->input('password');
 
         $user = Member::where('userid', '=', $user_name)->first();
+		if (!$user) {
+			$user = Member::where('pid', '=', $user_name)->first();
+		}
+
+		if (!$user) {
+			return response()->json([
+				'success' => false,
+				'error_message' => '用户不存在'
+			]);
+		}
+
         if ($user->pwd == strrev(md5($password))) {
             return response()->json([
                 'success' => true,
