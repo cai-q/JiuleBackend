@@ -63,7 +63,7 @@ class MobileAppController extends Controller
         return response()->json([
             'success' => true,
             'result' => [
-                'msglist' => PushLog::where('msgtype', $request->input('alias'))->get()->toArray()
+                'msglist' => PushLog::where('msgtype', $request->input('username'))->get()->toArray()
 			]
         ]);
     }
@@ -137,6 +137,30 @@ class MobileAppController extends Controller
 		}
 
 		return $rep;
+	}
+
+	public function postQueryWatch(Request $request)
+	{
+		$validator = Validator::make($request->all(), [
+			'username' => 'required|exists:mysql_old.member,userid',
+		]);
+		if ($validator->fails()) {
+			return response()->json([
+				'success' => false,
+				'error_message' => $validator->errors()->getMessages()
+			]);
+		}
+
+		$userid = $request->input('username');
+		$member = Member::where('userid', $userid)->first();
+
+		return response()->json([
+			'success' => true,
+			'result' => [
+				'hasWatch' => $member->status,
+				'watchNumber' => $member->pid
+			]
+		]);
 	}
 
     public function postUpdate(Request $request)

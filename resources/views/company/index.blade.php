@@ -13,7 +13,6 @@
     <div class="uk-grid uk-grid-collapse">
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
-                <a href="{{url('/company/create')}}" class="uk-button uk-button-primary"><i class="uk-icon uk-icon-plus"></i> 新增企业账号</a>
                 <div style="display: inline-block;" id="search">
                     <form class="uk-search" data-uk-search action="{{url('/company/search')}}">
                         <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
