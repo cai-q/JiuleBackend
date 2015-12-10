@@ -157,7 +157,7 @@ class MobileAppController extends Controller
 		return response()->json([
 			'success' => true,
 			'result' => [
-				'hasWatch' => $member->status,
+				'hasWatch' => $member->status?false:true,
 				'watchNumber' => $member->pid
 			]
 		]);
