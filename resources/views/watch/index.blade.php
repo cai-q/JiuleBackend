@@ -10,6 +10,7 @@
 @endsection
 
 @section('content')
+    <embed src="http://203.88.170.163:8080/images/warn.mp3" loop="0" autostart="1" hidden="true"></embed>
     <div class="uk-grid uk-grid-collapse">
         <div class="uk-width-small-3-3 uk-container-center">
             <div class="uk-panel">
@@ -20,10 +21,12 @@
                                 class="uk-icon uk-icon-plus"></i>批量导入</a>
                 @endif
                 <div style="display: inline-block;" id="search">
-                    <form class="uk-search" data-uk-search action="{{url('/watch/search')}}">
-                        <input class="uk-search-field uk-form-width-large" type="search" name="key"
-                               placeholder="在此输入搜索...">
-                    </form>
+                    <form class="uk-form" data-uk-search action="{{url('/watch/search')}}">
+                        <input class="uk-form-small" type="text" name="userid" placeholder="userid" value="{{isset($userid)?$userid:''}}">
+                        <input class="uk-form-small" type="text" name="pid" placeholder="pid" value="{{isset($pid)?$pid:''}}">
+                        <input class="uk-form-small" type="text" name="saled" placeholder="saled 0:未售出 1:售出" value="{{isset($saled)?$saled:''}}">
+                        <input class="uk-form-small" type="text" name="status" placeholder="status 0:激活 1:未激活" value="{{isset($status)?$status:''}}">
+                        <button class="uk-button uk-button-small" type="submit">搜索</button>                    </form>
                 </div>
                 <table class="uk-table uk-table-hover uk-table-striped">
                     <caption>手表管理</caption>
@@ -112,7 +115,12 @@
                     </tbody>
                 </table>
             </div>
-            {!! $items->appends(['key' => isset($key)?$key:''])->render() !!}
+            {!! $items->appends([
+                'pid' => isset($pid)?$pid:'',
+                'userid' => isset($userid)?$userid:'',
+                'saled' => isset($saled)?$saled:'',
+                'status' => isset($status)?$status:''
+            ])->render() !!}
         </div>
     </div>
 @endsection

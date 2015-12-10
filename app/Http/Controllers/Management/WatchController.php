@@ -6,6 +6,7 @@ use App\Member;
 use App\Relative;
 use App\User;
 use App\Watch;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -224,24 +225,44 @@ class WatchController extends Controller
 
     public function getSearch(Request $request)
     {
-        $init_key = $request->input('key');
-        $key = '%' . $request->input('key') . '%';
+        $pid = $request->input('pid', '');
+        $userid = $request->input('userid', '');
+        $saled = $request->input('saled', '');
+        $status = $request->input('status', '');
+        //$active = $request->input('check')[2];
+        //查时间数据库开销太大，故没加
 
-        if (\Auth::user()->user_type == 0) {
-            $items = Member
-                ::where('pid', 'like', $key)
-                ->orWhere('userid', 'like', $key);
-        } else {
-            $items = Member
-                ::where('pid', 'like', $key)
-                ->orWhere('userid', 'like', $key)
-                ->where('fid', '=', \Auth::user()->id);
+
+
+        $set = Member::join('product_ext', 'product_ext.pid', '=', 'member.pid')->select('*');
+        if ($pid) {
+            $set = $set->where('member.pid', 'like', '%'.$pid.'%');
+        }
+
+        if ($userid) {
+            $set = $set->where('member.userid', 'like', '%'.$userid.'%');
+        }
+
+        if ($saled != '') {
+            $set = $set->where('saled', $saled);
+        }
+
+        if ($status != '') {
+            $set = $set->where('member.status', $status);
+        }
+
+        if (\Auth::user()->user_type != 0) {
+            $set = $set->where('fid', '=', \Auth::user()->id);
         }
 
 
         return view('watch.index')->with([
-            'items' => $items->paginate(10),
-            'key' => $init_key
+            'items' => $set->paginate(10),
+            'pid' => $pid,
+            'userid' => $userid,
+            'saled' => $saled,
+            'status' => $status,
+//            'active' => $active
         ]);
     }
 

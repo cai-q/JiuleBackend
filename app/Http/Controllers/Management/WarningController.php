@@ -105,7 +105,7 @@ class WarningController extends Controller
         //
     }
 
-    public function getSearch(Request $request)
+    public function search(Request $request)
     {
         $option = $request->input('select');
 
@@ -159,6 +159,46 @@ class WarningController extends Controller
             'start' => $start,
             'end' => $end,
             'select' => $option
+        ]);
+    }
+
+    public function getSearch(Request $request)
+    {
+//        $userid = $request->input('userid', '');
+        $pid = $request->input('pid', '');
+        $start = $request->input('start', '');
+        $end = $request->input('end', '');
+        $warn_type = $request->input('warn_type', '');
+
+        $set =  Member::join('data_warn_save', 'data_warn_save.userid', '=', 'member.id')
+            ->select('*')->addSelect('member.userid');
+
+        if ($warn_type) {
+            $set = $set->where('data_warn_save.type', '=', $warn_type);
+        }
+
+        if ($pid) {
+            $set = $set->where('member.pid', 'like', '%'.$pid.'%');
+        }
+
+        if ($start) {
+            $set = $set->where('data_warn_save.time', '>=', strtotime($start));
+        }
+
+        if ($end) {
+            $set = $set->where('data_warn_save.time', '<', strtotime($end) + 3600 * 24);
+        }
+
+        if (\Auth::user()->user_type != 0) {
+            $set = $set->where('member.fid', '=', \Auth::user()->id);
+        }
+
+        return view('warning.index')->with([
+            'items' => $set->paginate(10),
+            'warn_type' => $warn_type,
+            'pid' => $pid,
+            'start' => $start,
+            'end' => $end,
         ]);
     }
 

@@ -21,10 +21,14 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (\Auth::user()->user_type == 0) {
-            $items = User::where('id', '>', 1);
+            if ($type = $request->input('type')) {
+                $items = User::where('user_type', $type);
+            } else {
+                $items = User::where('user_type', '!=', 0);
+            }
         } else {
             $items = User::where('parent_id', \Auth::user()->id);
         }

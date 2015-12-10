@@ -16,19 +16,18 @@
             <div class="uk-panel">
                 <div style="display: inline-block;" id="search">
                     <form  data-uk-search action="{{url('/warning/search')}}">
-                        <select id="se1" name="select">
-                            <option value="time">时间段</option>
-                            <option value="userid">用户名</option>
-                            <option value="pid">序列号</option>
+                        <select name="warn_type">
+                            <option value="0">报警类型</option>
+                            <option value="1">紧急呼叫</option>
+                            <option value="2">预警</option>
+                            <option value="3">报警</option>
+                            <option value="4">跌倒</option>
+                            <option value="5">健康提醒</option>
                         </select>
-                        <span id="op2" class="uk-hidden">
-                            <input class="uk-search-field uk-form-width-large" type="search" name="key" placeholder="在此输入搜索...">
-                        </span>
-                        <span id="op1">
-                            <input class="uk-form-small" name="start" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="开始日期" readonly>
-                            -
-                            <input class="uk-form-small" name="end" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="结束日期" readonly>
-                        </span>
+                        <input class="uk-form-small" type="text" name="pid" placeholder="pid">
+                        <input class="uk-form-small" name="start" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="开始日期" readonly>
+                        -
+                        <input class="uk-form-small" name="end" type="datetime" data-uk-datepicker="{format:'YYYY-MM-DD'}" placeholder="结束日期" readonly>
                         <button class="uk-button uk-button-small" type="submit">搜索</button>
                     </form>
                 </div>
@@ -73,7 +72,12 @@
                         </tbody>
                     </table>
                 </div>
-                {!! $items->appends(['key' => isset($key)?$key:'', 'start' => isset($start)?$start:'', 'end' => isset($end)?$end:'', 'select' => isset($select)?$select:''])->render() !!}
+                {!! $items->appends([
+                    'warn_type' => isset($warn_type)?$warn_type:'',
+                    'start' => isset($start)?$start:'',
+                    'end' => isset($end)?$end:'',
+                    'pid' => isset($pid)?$pid:''
+                ])->render() !!}
             </div>
         </div>
     </div>
@@ -85,19 +89,6 @@
     <script src="{{ asset('/js/components/lightbox.min.js') }}"></script>
     <script src="{{ asset('/js/components/search.min.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $("#se1").change(function () {
-                a = $("#se1").val();
-                if (a == 'time') {
-                    $("#op2").addClass('uk-hidden');
-                    $("#op1").removeClass('uk-hidden');
-                } else {
-
-                    $("#op1").addClass('uk-hidden');
-                    $("#op2").removeClass('uk-hidden');
-                }
-            });
-        });
     </script>
     <script src="{{ asset('/js/components/datepicker.min.js') }}"></script>
 @endsection

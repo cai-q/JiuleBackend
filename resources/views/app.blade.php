@@ -60,7 +60,7 @@
     </div>
 </nav>
 
-@if(!Auth::guest() and $user->user_type != 2))
+@if(!Auth::guest() and $user->user_type != 2)
 <div class="uk-grid">
 @else
 <div>
@@ -76,8 +76,13 @@
                         </a>
                         <ul class="uk-nav-sub">
                             <li>
-                                <a href="{{ url('/company') }}">
-                                    用户管理
+                                <a href="{{ url('/company?type=1') }}">
+                                    企业用户管理
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/company?type=2') }}">
+                                    监控用户管理
                                 </a>
                             </li>
                             <li>
