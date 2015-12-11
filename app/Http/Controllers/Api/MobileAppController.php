@@ -285,8 +285,8 @@ class MobileAppController extends Controller
             'success' => true,
             'result' => [
                 'bloodOxygen' => $set1?$set1->spo2:null,
-                'heartRate' => $set1->heartrate,
-                'activity' => $set2->activity,
+                'heartRate' => $set1?$set1->heartrate:null,
+                'activity' => $set2?$set2->activity:null,
                 'sleep' => ($set2->sleep_total_time >= 360)? '良好':'差',
                 'urgentCall' => $relative->phone,
                 'callPolice' => $set3? $set3->toArray():null,
