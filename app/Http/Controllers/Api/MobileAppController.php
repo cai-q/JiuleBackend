@@ -284,7 +284,7 @@ class MobileAppController extends Controller
         return response()->json([
             'success' => true,
             'result' => [
-                'bloodOxygen' => $set1->spo2,
+                'bloodOxygen' => $set1?$set1->spo2:null,
                 'heartRate' => $set1->heartrate,
                 'activity' => $set2->activity,
                 'sleep' => ($set2->sleep_total_time >= 360)? '良好':'差',
