@@ -176,7 +176,6 @@ class MobileAppController extends Controller
 
     public function postUpdate(Request $request)
     {
-		require_once('./JiulePush/IGt.Push.php');
 
         return response()->json([
             'success' => true,
