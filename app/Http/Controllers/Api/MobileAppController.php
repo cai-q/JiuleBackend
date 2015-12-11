@@ -70,11 +70,26 @@ class MobileAppController extends Controller
 
     public function postMessage(Request $request)
     {
-        //TODO download new message
+		$validator = Validator::make($request->all(), [
+			'username' => 'required|exists:mysql_old.member,userid',
+		]);
+		if ($validator->fails()) {
+			return response()->json([
+				'success' => false,
+				'error_message' => $validator->errors()->getMessages()
+			]);
+		}
+
+		$mid = Member::where('userid', $request->input('username'))->first()->id;
+		$warn_list = \DB::connection('mysql_old')->table('data_warn_save')
+			->where('userid', $mid)
+			->where('type', '!=', 5)
+			->orderBy('id', 'DESC');
+
         return response()->json([
             'success' => true,
             'result' => [
-                'msglist' => PushLog::where('msgtype', $request->input('username'))->get()->toArray()
+                'warnlist' => $warn_list
 			]
         ]);
     }
@@ -273,7 +288,7 @@ class MobileAppController extends Controller
 
 
         $set3 = \DB::connection('mysql_old')->table('data_warn_save')
-            ->where('userid', $userid)
+            ->where('userid', $member->id)
             ->where('type', '!=', 5)
             ->orderBy('id', 'DESC')
             ->first();
@@ -290,7 +305,10 @@ class MobileAppController extends Controller
                 'sleep' => ($set2->sleep_total_time >= 360)? '良好':'差',
                 'urgentCall' => $relative->phone,
                 'callPolice' => $set3? $set3->toArray():null,
-                'lifeWarning' => ''
+                'lifeWarning' => null,
+				'ecg' => null,
+				'emotion' => null,
+				'temperature' => null
             ]
         ]);
     }
@@ -566,7 +584,7 @@ class MobileAppController extends Controller
 					$data['admin'] = \Auth::user()->email;
 					$data['mark'] = $mark;
 					$data['type'] = 0;
-					$in_flag=DB::connection('mysql_old')->insert('insert into jl_warn_log set wid='.$data['wid'].',time='.$data['time'].',admin="'.$data['admin'].'",mark="'.$data['mark'].'",type='.$data['type']);
+					$in_flag=DB::connection('mysql_old')->insert('insert into jl_warn_log set userid='.$id.',wid='.$data['wid'].',time='.$data['time'].',admin="'.$data['admin'].'",mark="'.$data['mark'].'",type='.$data['type']);
 					if($in_flag!== true){
 						$rs['sucess']=false;
 						$rs['data']="数据提交失败，请稍后重试！";
@@ -592,7 +610,7 @@ class MobileAppController extends Controller
 					$data['admin'] = \Auth::user()->email;
 					$data['mark'] = $mark;
 					$data['type'] = 1;
-					$in_flag=DB::connection('mysql_old')->insert('insert into jl_warn_log set wid='.$data['wid'].',time='.$data['time'].',admin="'.$data['admin'].'",mark="'.$data['mark'].'",type='.$data['type']);
+					$in_flag=DB::connection('mysql_old')->insert('insert into jl_warn_log set userid='.$id.',wid='.$data['wid'].',time='.$data['time'].',admin="'.$data['admin'].'",mark="'.$data['mark'].'",type='.$data['type']);
 					if($in_flag!== true){
 						$rs['sucess']=false;
 						$rs['data']="数据提交失败，请稍后重试！";
