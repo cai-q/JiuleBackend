@@ -64,6 +64,8 @@ Route::post('company/create-watcher', 'Management\CompanyController@postCreateWa
 
 Route::get('company/watcher-index', 'Management\CompanyController@getWatcherIndex');
 
+
+Route::controller('update', 'Management\UpdateController');
 //管理后台，增删改查功能
 Route::resource('watch', 'Management\WatchController');//TODO 手表管理
 Route::resource('company', 'Management\CompanyController');//TODO 企业账号管理

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Member;
 use App\PushLog;
 use App\Relative;
+use App\UpdateInformation;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,11 +48,12 @@ class MobileAppController extends Controller
             return response()->json([
                 'success' => true,
                 'result' => [
-                    'userid' => $user->userid,
-                    'username' => $user->uname,
+                    'userid' => $user->id,
+                    'username' => $user->userid,
                     'usertype' => $user->usertype,
+                    'pid' => $user->pid,
                     'nickname' => $user->cname,
-                    'mobile' => $user->tphone,
+                    'mobile' => $user->phone,
                     //'credits' => $user->
                     'hdpurl' => $user->picpath
                     //'xm' =>
@@ -68,10 +70,10 @@ class MobileAppController extends Controller
 
     }
 
-    public function postMessage(Request $request)
-    {
+	public function postRead(Request $request)
+	{
 		$validator = Validator::make($request->all(), [
-			'username' => 'required|exists:mysql_old.member,userid',
+			'messageId' => 'required|exists:mysql_old.data_warn_save,id',
 		]);
 		if ($validator->fails()) {
 			return response()->json([
@@ -80,16 +82,51 @@ class MobileAppController extends Controller
 			]);
 		}
 
-		$mid = Member::where('userid', $request->input('username'))->first()->id;
-		$warn_list = \DB::connection('mysql_old')->table('data_warn_save')
-			->where('userid', $mid)
-			->where('type', '!=', 5)
-			->orderBy('id', 'DESC');
+		\DB::connection('mysql_old')->table('data_warn_save')
+			->where('id', '=', $request->input('messageId'))
+			->update(['read' => 1]);
+
+		return response()->json([
+			'success' => true
+		]);
+	}
+
+    public function postMessage(Request $request)
+    {
+		$validator = Validator::make($request->all(), [
+			'username' => 'required|exists:mysql_old.member,id',
+			'time' => ''
+		]);
+		if ($validator->fails()) {
+			return response()->json([
+				'success' => false,
+				'error_message' => $validator->errors()->getMessages()
+			]);
+		}
+
+		$mid = $request->input('username');
+
+		if ($request->has('time')) {
+			$time_str = $request->input('time');
+			$time = strtotime($time_str);
+
+			$warn_list = \DB::connection('mysql_old')->table('data_warn_save')
+				->where('userid', $mid)
+				->where('type', '!=', 5)
+				->where('time', '>=', $time)
+				->where('time', '<', $time + 3600 * 24)
+				->orderBy('id', 'DESC');
+		} else {
+			$warn_list = \DB::connection('mysql_old')->table('data_warn_save')
+				->where('userid', $mid)
+				->where('type', '!=', 5)
+				->orderBy('id', 'DESC');
+		}
 
         return response()->json([
             'success' => true,
             'result' => [
-                'warnlist' => $warn_list
+                'warnlist' => $warn_list?$warn_list->get():null
 			]
         ]);
     }
@@ -100,9 +137,9 @@ class MobileAppController extends Controller
 
 		require_once(dirname(__FILE__) . '/JiulePush/' . 'IGt.Push.php');
 
-		define('APPKEY','PHD9JWXNy89kmYY9NF7V92');
-		define('APPID','7t2rQy5B0w9sXNZN6JJf2');
-		define('MASTERSECRET','Gt19kYh3N88tMRODZp4rH2');
+		define('APPKEY','w5FhVpAEBcAewXzpmEVHHA');
+		define('APPID','63GHvHb4Qr8cIluoXJF797');
+		define('MASTERSECRET','CiB2pa7jZn6nhIVOkamyV9');
 		define('HOST','http://sdk.open.api.igexin.com/apiex.htm');
 		define('CID','');
 //define('CID2','请输入ClientID');
@@ -111,7 +148,7 @@ class MobileAppController extends Controller
 
 		$igt = new \IGeTui(HOST,APPKEY,MASTERSECRET);
 //		$res = $igt->queryAlias(APPID, ALIAS);
-//		dd($res);
+//		dd($res)
 
 //消息模版：
 // 1.TransmissionTemplate:透传功能模板
@@ -168,7 +205,7 @@ class MobileAppController extends Controller
 	public function postQueryWatch(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
-			'username' => 'required|exists:mysql_old.member,userid',
+			'username' => 'required|exists:mysql_old.member,id',
 		]);
 		if ($validator->fails()) {
 			return response()->json([
@@ -178,7 +215,7 @@ class MobileAppController extends Controller
 		}
 
 		$userid = $request->input('username');
-		$member = Member::where('userid', $userid)->first();
+		$member = Member::where('id', $userid)->first();
 
 		return response()->json([
 			'success' => true,
@@ -192,16 +229,18 @@ class MobileAppController extends Controller
     public function postUpdate(Request $request)
     {
 
+		$update = UpdateInformation::first();
+
         return response()->json([
             'success' => true,
-            'result' => [
-                'version' => 'undefined',
-                'updatemsg' => 'undefined',
-                'updateflag' => 'undefined',
-                'updateurl' => 'undefined'
-            ]
+//            'result' => $update->toArray()
+			'result' => [
+				'version' => $update->version,
+				'updatemsg' => $update->message,
+				'updateflag' => 'undefined',
+				'updateurl' => $update->download_url
+			]
         ]);
-        //TODO get the download link
     }
 
     public function postActivate(Request $request)
@@ -220,18 +259,20 @@ class MobileAppController extends Controller
         }
 
         $pid = $request->input('indexCode');
-        $userid = $request->input('username');
+        $uname = $request->input('username');
         $phone = $request->input('phoneNumber');
 
-        $emergency_contact = $request->input('phoneNumber1');
-        $emergency_contact2 = $request->input('name1');
-        $emergency_phone = $request->input('phoneNumber2');
-        $emergency_phone2 = $request->input('name2');
+        $emergency_contact = $request->input('name1');
+        $emergency_contact2 = $request->input('name2');
+        $emergency_phone = $request->input('phoneNumber1');
+        $emergency_phone2 = $request->input('phoneNumber2');
 
         $member = Member::where('pid', $pid)->first();
         $member->status = 0;
-        $member->userid = $userid;
+        $member->uname = $uname;
         $member->phone = $phone;
+        $member->rphone1 = $emergency_phone;
+        $member->rphone2 = $emergency_phone2;
         $member->save();
 
         $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
@@ -262,7 +303,7 @@ class MobileAppController extends Controller
     public function postUserIndex(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|exists:mysql_old.member,userid',
+            'username' => 'required|exists:mysql_old.member,id',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -272,70 +313,17 @@ class MobileAppController extends Controller
         }
 
         $userid = $request->input('username');
-        $member = Member::where('userid', $userid)->first();
+
+		$uname = Member::where('id', '=', $userid)->first()->uname;
 
 
-        $set1 = \DB::connection('mysql_old')->table('data')->where('userid', $member->id)
+        $set1 = \DB::connection('mysql_old')->table('data')->where('userid', $userid)
             ->where('heartrate', '!=', 0)
             ->orderBy('time', 'DESC')
             ->select(['heartrate', 'spo2'])
             ->first();
 
-        $set2 = \DB::connection('mysql_old')->table('data')->where('userid', $member->id)
-            ->orderBy('time', 'DESC')
-            ->select(['id', 'activity', 'sleep_total_time'])
-            ->first();
-
-
-        $set3 = \DB::connection('mysql_old')->table('data_warn_save')
-            ->where('userid', $member->id)
-            ->where('type', '!=', 5)
-            ->orderBy('id', 'DESC')
-            ->first();
-
-        $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
-
-
-        return response()->json([
-            'success' => true,
-            'result' => [
-                'bloodOxygen' => $set1?$set1->spo2:null,
-                'heartRate' => $set1?$set1->heartrate:null,
-                'activity' => $set2?$set2->activity:null,
-                'sleep' => ($set2->sleep_total_time >= 360)? '良好':'差',
-                'urgentCall' => $relative->phone,
-                'callPolice' => $set3? $set3->toArray():null,
-                'lifeWarning' => null,
-				'ecg' => null,
-				'emotion' => null,
-				'temperature' => null
-            ]
-        ]);
-    }
-
-    public function getTest(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|exists:mysql_old.member,userid',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'error_message' => $validator->errors()->getMessages()
-            ]);
-        }
-
-        $userid = $request->input('username');
-        $member = Member::where('userid', $userid)->first();
-
-
-        $set1 = \DB::connection('mysql_old')->table('data')->where('userid', $member->id)
-            ->where('heartrate', '!=', 0)
-            ->orderBy('time', 'DESC')
-            ->select(['heartrate', 'spo2'])
-            ->first();
-
-        $set2 = \DB::connection('mysql_old')->table('data')->where('userid', $member->id)
+        $set2 = \DB::connection('mysql_old')->table('data')->where('userid', $userid)
             ->orderBy('time', 'DESC')
             ->select(['id', 'activity', 'sleep_total_time'])
             ->first();
@@ -347,18 +335,90 @@ class MobileAppController extends Controller
             ->orderBy('id', 'DESC')
             ->first();
 
-        $relative = Relative::where('mid', $member->id)->where('main', 1)->first();
+        $relative = Relative::where('mid', $userid)->where('main', 1)->first();
+		$sleep=$set2?$set2->sleep_total_time:0;
 
+		$recent_warn = [];
+
+		for ($i = 1; $i <= 5; $i++) {
+			$warn = \DB::connection('mysql_old')->table('data_warn_save')
+				->where('userid', $userid)
+				->where('type', '=', $i)
+				->orderBy('id', 'DESC')
+				->first();
+
+			$recent_warn[]= $warn;
+		}
+		
+        return response()->json([
+            'success' => true,
+            'result' => [
+                'bloodOxygen' => $set1?$set1->spo2:null,
+                'heartRate' => $set1?$set1->heartrate:null,
+                'activity' => $set2?$set2->activity:null,
+                'sleep' => ($sleep>= 360)? '良好':'差',
+				'recent_warn' => $recent_warn,
+				'uname' => $uname,
+                //'urgentCall' => $relative? $relative->phone:null,
+                //'callPolice' => $set3? $set3->toArray():null,
+                'lifeWarning' => null,
+				'ecg' => null,
+				'emotion' => null,
+				'temperature' => null
+            ]
+        ]);
+    }
+
+    public function getTest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|exists:mysql_old.member,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'error_message' => $validator->errors()->getMessages()
+            ]);
+        }
+
+        $userid = $request->input('username');
+
+		
+        $set1 = \DB::connection('mysql_old')->table('data')->where('userid', $userid)
+            ->where('heartrate', '!=', 0)
+            ->orderBy('time', 'DESC')
+            ->select(['heartrate', 'spo2'])
+            ->first();
+		
+        $set2 = \DB::connection('mysql_old')->table('data')->where('userid', $userid)
+            ->orderBy('time', 'DESC')
+            ->select(['activity', 'sleep_total_time'])
+            ->first();
+
+
+        $set3 = \DB::connection('mysql_old')->table('data_warn_save')
+            ->where('userid', $userid)
+            ->where('type', '!=', 5)
+            ->orderBy('id', 'DESC')
+            ->first();
+			
+
+        $relative = Relative::where('mid', $userid)->where('main', 1)->first();
+		$sleep=$set2?$set2->sleep_total_time:0;
 
         return response()->json([
             'success' => true,
             'result' => [
-                'bloodOxygen' => $set1->spo2,
-                'heartRate' => $set1->heartrate,
-                'activity' => $set2->activity,
-                'sleep' => ($set2->sleep_total_time >= 360)? '良好':'差',
-                'urgentCall' => $relative->phone,
-                'callPolice' => $set3? $set3->toArray():null,
+                'bloodOxygen' => $set1?$set1->spo2:null,
+                'heartRate' => $set1?$set1->heartrate:null,
+                'activity' => $set2?$set2->activity:null,
+                'sleep' => ($sleep >= 360)? '良好':'差',
+                //'urgentCall' => $relative? $relative->phone:null,
+                //'callPolice' => $set3? $set3->toArray():null,
+                'lifeWarning' => null,
+				'ecg' => null,
+				'emotion' => null,
+				'temperature' => null
             ]
         ]);
     }
@@ -507,7 +567,6 @@ class MobileAppController extends Controller
 						$data[$i]['relationship'][0]['phone']='没有数据';
 						$data[$i]['relationship'][1]['name']='没有数据';
 						$data[$i]['relationship'][1]['phone']='没有数据';
-						
 					}					
 					
 					

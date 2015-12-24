@@ -115,6 +115,19 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="uk-nav-divider"></li>
+                    <li class="uk-parent">
+                        <a href="#">
+                            app版本管理
+                        </a>
+                        <ul class="uk-nav-sub">
+                            <li>
+                                <a href="{{ url('/update/form') }}">
+                                    app版本管理
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @elseif($user->user_type == 1)
                     <li class="uk-parent">
                         <a href="#">企业信息管理</a>
